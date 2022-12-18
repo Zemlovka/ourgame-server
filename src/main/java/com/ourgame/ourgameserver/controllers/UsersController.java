@@ -1,16 +1,12 @@
 package com.ourgame.ourgameserver.controllers;
 
 import com.ourgame.ourgameserver.controllers.dto.*;
-import com.ourgame.ourgameserver.service.TokenService;
+import com.ourgame.ourgameserver.security.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,11 +24,13 @@ public class UsersController {
         testUserMap.put("test", "test");
     }
 
+    @CrossOrigin
     @PostMapping("/token")
     public String token(Authentication authentication) {
         LOG.info("token requested for user: '{}'", authentication.getName());
         String token = tokenService.generateToken(authentication);
         LOG.debug("token generated: '{}'", token);
+        System.out.println("Request token for user: " + authentication.getName());
         return token;
     }
 
@@ -41,9 +39,10 @@ public class UsersController {
      * Test get mapping, used for connection testing
      * @return always 200 code + test string
      */
+    @CrossOrigin
     @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("test");
+    public ResponseEntity<StringPlusImage> test() {
+        return ResponseEntity.ok(new StringPlusImage("Saul Goodman", "https://lh3.googleusercontent.com/aPeSCag8eHV8Xfsu2FdRzRrV0KzD3CWkO8jGbvGZSFIvA_5-8BJ6cHh0lkvqXeUYFwDRp03pH3HdqMNv9--Pv_jw0z1USaKyjg=s400"));
     }
 
     /**

@@ -9,6 +9,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jwt.JWT;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -46,17 +47,31 @@ public class SecurityConfig {
     }
 
     @Bean
+//    @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf().disable()
+                .cors(withDefaults())
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
                                 .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .httpBasic(withDefaults())
+                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .build();
     }
+
+//    @Bean
+//    @Order(1)
+//    public SecurityFilterChain securityFilterChain2(HttpSecurity http) throws Exception {
+//        return http
+//                .csrf().disable()
+//                .authorizeHttpRequests(authorize -> authorize
+//                    .requestMatchers("/api/token").authenticated()
+//                )
+//                .httpBasic(withDefaults())
+//                .build();
+//    }
 
 
     @Bean

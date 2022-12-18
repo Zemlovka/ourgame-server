@@ -1,4 +1,4 @@
-package com.ourgame.ourgameserver.service;
+package com.ourgame.ourgameserver.security.service;
 
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.security.core.Authentication;
