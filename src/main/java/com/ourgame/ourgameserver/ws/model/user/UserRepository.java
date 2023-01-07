@@ -1,4 +1,4 @@
-package com.ourgame.ourgameserver.model.user;
+package com.ourgame.ourgameserver.ws.model.user;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

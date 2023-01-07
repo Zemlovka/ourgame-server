@@ -1,27 +1,26 @@
-package com.ourgame.ourgameserver.controllers;
+package com.ourgame.ourgameserver.ws.controllers;
 
-import com.ourgame.ourgameserver.controllers.dto.*;
-import com.ourgame.ourgameserver.security.service.TokenService;
+import com.ourgame.ourgameserver.ws.model.user.UserService;
+import com.ourgame.ourgameserver.ws.security.service.TokenService;
+import com.ourgame.ourgameserver.ws.controllers.dto.StringPlusImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 @RestController
 @RequestMapping("/api")
 public class UsersController {
-    Map<String, String> testUserMap = new HashMap<>();
     private static final Logger LOG = LoggerFactory.getLogger(UsersController.class);
     private final TokenService tokenService;
+    private final UserService userService;
 
-    public UsersController(TokenService tokenService) {
+    public UsersController(TokenService tokenService, UserService userService) {
         this.tokenService = tokenService;
-        testUserMap.put("test", "test");
+        this.userService = userService;
+
     }
 
     @CrossOrigin
@@ -44,4 +43,11 @@ public class UsersController {
     public ResponseEntity<StringPlusImage> test(Authentication authentication) {
         return ResponseEntity.ok(new StringPlusImage(authentication.getName(), "https://lh3.googleusercontent.com/aPeSCag8eHV8Xfsu2FdRzRrV0KzD3CWkO8jGbvGZSFIvA_5-8BJ6cHh0lkvqXeUYFwDRp03pH3HdqMNv9--Pv_jw0z1USaKyjg=s400"));
     }
+
+    @CrossOrigin
+    @GetMapping("/connect-socket")
+    public ResponseEntity<String> connectSocket(Authentication authentication) {
+        return ResponseEntity.ok("Connected");
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.ourgame.ourgameserver.controllers.dto;
+package com.ourgame.ourgameserver.ws.controllers.dto;
 
 import lombok.Getter;
 import lombok.Setter;

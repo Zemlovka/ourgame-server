@@ -1,4 +1,4 @@
-package com.ourgame.ourgameserver.security;
+package com.ourgame.ourgameserver.ws.security;
 
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -14,7 +14,6 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -39,8 +38,9 @@ public class SecurityConfig {
     @Bean
     public InMemoryUserDetailsManager user() {
         return new InMemoryUserDetailsManager(
-                User.withUsername("username")
-                        .password("{noop}password")
+                User.withDefaultPasswordEncoder()
+                        .username("user")
+                        .password("password")
                         .roles("USER")
                         .build()
         );
@@ -50,31 +50,14 @@ public class SecurityConfig {
 //    @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-//                .csrf().disable()
-//                .cors(withDefaults())
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .anyRequest().authenticated()
-//                )
-//                .httpBasic(withDefaults())
-//                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-//                .build();
-
-
-//                .csrf(csrf -> csrf.disable())
-//                .authorizeRequests( auth -> auth
-//                        .anyRequest().authenticated()
-//                )
-//                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .httpBasic(withDefaults())
-//                .build();
-
-                .csrf(csrf -> csrf.disable()) // (1)
-                .authorizeRequests( auth -> auth
-                        .anyRequest().authenticated() // (2)
+                .csrf().disable()
+                .cors(withDefaults())
+                .authorizeRequests(authorizeRequests ->
+                        authorizeRequests
+                                .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // (3)
-                .httpBasic(Customizer.withDefaults()) // (4)
+                .httpBasic(withDefaults())
+                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .build();
     }
 

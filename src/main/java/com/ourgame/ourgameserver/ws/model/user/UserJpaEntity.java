@@ -1,4 +1,4 @@
-package com.ourgame.ourgameserver.model.user;
+package com.ourgame.ourgameserver.ws.model.user;
 
 
 
@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "users")
-public class UserJpaEntity implements UserDetails {
+class UserJpaEntity {
     @Id
     @Column(name = "username", nullable = false)
     private String id;
@@ -27,12 +27,16 @@ public class UserJpaEntity implements UserDetails {
     @Column(name = "email", nullable = true)
     private String email;
 
-    @Column(name = "role", nullable = false)
+    @Column(name = "role", nullable = true)
     private GrantedAuthority authorities;
 
     @Column(name = "avatar", nullable = true)
     private File avatar;
 
+    public UserJpaEntity(String id, String password) {
+        this.id = id;
+        this.password = password;
+    }
 
     public UserJpaEntity() {
     }
@@ -43,37 +47,37 @@ public class UserJpaEntity implements UserDetails {
         this.authorities = authorities;
     }
 
-    @Override
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Set.of(authorities);
     }
 
-    @Override
+
     public String getPassword() {
         return null;
     }
 
-    @Override
+
     public String getUsername() {
         return id;
     }
 
-    @Override
+
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @Override
+
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    @Override
+
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    @Override
+
     public boolean isEnabled() {
         return true;
     }

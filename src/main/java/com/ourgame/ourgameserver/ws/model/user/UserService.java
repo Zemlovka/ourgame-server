@@ -1,12 +1,11 @@
-package com.ourgame.ourgameserver.model.user;
+package com.ourgame.ourgameserver.ws.model.user;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final UserRepository userRepository;
 
@@ -14,7 +13,11 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    @Override
+    public UserJpaEntity saveUser(UserJpaEntity userJpaEntity) {
+        return userRepository.save(userJpaEntity);
+    }
+
+
     public UserJpaEntity loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findById(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
