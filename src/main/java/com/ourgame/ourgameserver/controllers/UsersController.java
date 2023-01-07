@@ -25,7 +25,7 @@ public class UsersController {
     }
 
     @CrossOrigin
-    @PostMapping("/token")
+    @GetMapping("/token")
     public String token(Authentication authentication) {
         LOG.info("token requested for user: '{}'", authentication.getName());
         String token = tokenService.generateToken(authentication);
@@ -41,26 +41,7 @@ public class UsersController {
      */
     @CrossOrigin
     @GetMapping("/test")
-    public ResponseEntity<StringPlusImage> test() {
-        return ResponseEntity.ok(new StringPlusImage("Saul Goodman", "https://lh3.googleusercontent.com/aPeSCag8eHV8Xfsu2FdRzRrV0KzD3CWkO8jGbvGZSFIvA_5-8BJ6cHh0lkvqXeUYFwDRp03pH3HdqMNv9--Pv_jw0z1USaKyjg=s400"));
-    }
-
-    /**
-     * Test post mapping, used for connection testing
-     * @return always 200 code + test string
-     */
-    @PostMapping(path = "/register")
-    public ResponseEntity<String> registerUser() {
-        return ResponseEntity.ok("User registered");
-    }
-
-
-    @PostMapping(path = "/login")
-    public ResponseEntity<String> loginUser(User user) {
-        if (testUserMap.containsKey(user.getUsername()) && testUserMap.get(user.getUsername()).equals(user.getPassword())) {
-            return ResponseEntity.ok("User logged in");
-        } else {
-            return ResponseEntity.badRequest().body("User not found");
-        }
+    public ResponseEntity<StringPlusImage> test(Authentication authentication) {
+        return ResponseEntity.ok(new StringPlusImage(authentication.getName(), "https://lh3.googleusercontent.com/aPeSCag8eHV8Xfsu2FdRzRrV0KzD3CWkO8jGbvGZSFIvA_5-8BJ6cHh0lkvqXeUYFwDRp03pH3HdqMNv9--Pv_jw0z1USaKyjg=s400"));
     }
 }

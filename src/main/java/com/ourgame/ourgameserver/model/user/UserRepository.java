@@ -5,10 +5,5 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface UserRepository
-//        extends CrudRepository<UserJpaEntity, Integer>
-{
-//    boolean existsByUsername(String id);
-//
-//    UserJpaEntity findUserByUsername(String id);
+interface UserRepository extends CrudRepository<UserJpaEntity, String> {
 }
