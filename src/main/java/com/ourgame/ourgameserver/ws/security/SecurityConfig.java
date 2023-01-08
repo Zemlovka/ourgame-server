@@ -9,6 +9,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import com.ourgame.ourgameserver.ws.model.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -44,25 +45,47 @@ public class SecurityConfig {
     }
 
     @Bean
-//    @Order(2)
+    @Order(1)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf().disable()
                 .cors(withDefaults())
-                .authorizeRequests(authorizeRequests ->
-                        authorizeRequests
-                                .anyRequest().authenticated()
+
+                .securityMatcher("/api/token")
+                .authorizeHttpRequests(authorize ->
+                        authorize.anyRequest().authenticated()
                 )
+                .securityMatcher("/api/register")
+                .authorizeHttpRequests(authorize ->
+                        authorize.anyRequest().permitAll()
+                )
+
                 .httpBasic(withDefaults())
                 .authenticationProvider(authProvider())
-
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-
-
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
 
+    @Bean
+    @Order(2)
+    public SecurityFilterChain securityFilterChain2(HttpSecurity http) throws Exception {
+        return http
+                .csrf().disable()
+                .cors(withDefaults())
+
+                .securityMatcher("/api/**")
+                .authorizeHttpRequests(authorize ->
+                        authorize.anyRequest().authenticated()
+                )
+
+                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //TODO cast to always
+                .build();
+    }
+
+    //docs.spring.io/spring-security/reference/servlet/configuration/java.html
 //    @Bean https://www.bezkoder.com/spring-boot-security-login-jwt/
 //    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
 //        return authConfig.getAuthenticationManager();
@@ -75,21 +98,6 @@ public class SecurityConfig {
         authProvider.setPasswordEncoder(encoder);
         return authProvider;
     }
-
-
-    //docs.spring.io/spring-security/reference/servlet/configuration/java.html
-
-//    @Bean
-//    @Order(1)
-//    public SecurityFilterChain securityFilterChain2(HttpSecurity http) throws Exception {
-//        return http
-//                .csrf().disable()
-//                .authorizeHttpRequests(authorize -> authorize
-//                    .requestMatchers("/api/token").authenticated()
-//                )
-//                .httpBasic(withDefaults())
-//                .build();
-//    }
 
 
     @Bean
