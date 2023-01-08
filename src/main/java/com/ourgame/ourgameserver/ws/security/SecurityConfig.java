@@ -51,14 +51,11 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors(withDefaults())
 
-                .securityMatcher("/api/token")
-                .authorizeHttpRequests(authorize ->
-                        authorize.anyRequest().authenticated()
-                )
-                .securityMatcher("/api/register")
-                .authorizeHttpRequests(authorize ->
-                        authorize.anyRequest().permitAll()
-                )
+                .securityMatcher("/api/register", "/api/token")
+                .authorizeHttpRequests().requestMatchers("/api/register").permitAll()
+                .and()
+                .authorizeHttpRequests().requestMatchers("/api/token").authenticated()
+                .and()
 
                 .httpBasic(withDefaults())
                 .authenticationProvider(authProvider())

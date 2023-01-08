@@ -27,10 +27,11 @@ public class UsersController {
     private PasswordEncoder encoder;
 
     public UsersController(TokenService tokenService, UserService userService) {
-        userService.saveUser(new User("user",  "password", new SimpleGrantedAuthority("ROLE_USER")));
+        try {
+            userService.saveUser(new User("user",  "password", new SimpleGrantedAuthority("ROLE_USER")));
+        } catch (UserAlreadyExistsException e) {}
         this.tokenService = tokenService;
         this.userService = userService;
-
     }
 
 
