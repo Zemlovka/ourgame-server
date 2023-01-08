@@ -50,10 +50,16 @@ public class SecurityConfig {
         return http
                 .csrf().disable()
                 .cors(withDefaults())
+
                 .securityMatcher("/api/token")
                 .authorizeHttpRequests(authorize ->
                         authorize.anyRequest().authenticated()
                 )
+                .securityMatcher("/api/register")
+                .authorizeHttpRequests(authorize ->
+                        authorize.anyRequest().permitAll()
+                )
+
                 .httpBasic(withDefaults())
                 .authenticationProvider(authProvider())
                 .sessionManagement(session ->
@@ -67,10 +73,12 @@ public class SecurityConfig {
         return http
                 .csrf().disable()
                 .cors(withDefaults())
+
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(authorize ->
                         authorize.anyRequest().authenticated()
                 )
+
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //TODO cast to always
