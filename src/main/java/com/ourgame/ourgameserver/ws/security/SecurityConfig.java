@@ -67,8 +67,8 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors(withDefaults())
                 .securityMatcher("/api/**")
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().authenticated()
+                .authorizeHttpRequests(authorize ->
+                        authorize.anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
