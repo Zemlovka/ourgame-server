@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api")
 public class UsersController {
     private static final Logger LOG = LoggerFactory.getLogger(UsersController.class);
@@ -29,7 +30,7 @@ public class UsersController {
 
     }
 
-    @CrossOrigin
+
     @GetMapping("/token")
     public String getToken(Authentication authentication) {
         LOG.info("token requested for user: '{}'", authentication.getName());
@@ -44,13 +45,12 @@ public class UsersController {
      * Test get mapping, used for connection testing
      * @return always 200 code + test string
      */
-    @CrossOrigin
     @GetMapping("/stats")
     public ResponseEntity<StringPlusImage> displayStats(Authentication authentication) {
         return ResponseEntity.ok(new StringPlusImage(authentication.getName(), "https://lh3.googleusercontent.com/aPeSCag8eHV8Xfsu2FdRzRrV0KzD3CWkO8jGbvGZSFIvA_5-8BJ6cHh0lkvqXeUYFwDRp03pH3HdqMNv9--Pv_jw0z1USaKyjg=s400"));
     }
 
-    @CrossOrigin
+
     @GetMapping("/connect-socket")
     public ResponseEntity<String> connectSocket(Authentication authentication) {
         return ResponseEntity.ok("Connected");
