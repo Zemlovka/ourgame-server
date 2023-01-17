@@ -1,6 +1,6 @@
 package com.ourgame.ourgameserver.ws.model.user;
 
-import com.ourgame.ourgameserver.ws.controllers.dto.User;
+import com.ourgame.ourgameserver.ws.controllers.dto.UserDto;
 import com.ourgame.ourgameserver.ws.model.exceptions.UserAlreadyExistsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +19,7 @@ public class UserService implements UserDetailsService {
         this.encoder = encoder;
     }
 
-    public UserJpaEntity saveUser(User userDto) throws UserAlreadyExistsException {
+    public UserJpaEntity saveUser(UserDto userDto) throws UserAlreadyExistsException {
         UserJpaEntity user = new UserJpaEntity();
         user.setId(userDto.getUsername());
         user.setPassword(encoder.encode(userDto.getPassword()));

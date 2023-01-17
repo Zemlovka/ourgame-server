@@ -51,10 +51,10 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors(withDefaults())
 
-                .securityMatcher("/api/register", "/api/token")
-                .authorizeHttpRequests().requestMatchers("/api/register").permitAll()
+                .securityMatcher("/user/register", "/user/token")
+                .authorizeHttpRequests().requestMatchers("/user/register").permitAll()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/api/token").authenticated()
+                .authorizeHttpRequests().requestMatchers("/user/token").authenticated()
                 .and()
 
                 .httpBasic(withDefaults())
@@ -71,10 +71,9 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors(withDefaults())
 
-                .securityMatcher("/api/**")
-                .authorizeHttpRequests(authorize ->
-                        authorize.anyRequest().authenticated()
-                )
+                .securityMatcher("/**")
+                .authorizeHttpRequests().anyRequest().authenticated()
+                .and()
 
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(session ->

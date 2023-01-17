@@ -2,12 +2,19 @@ package com.ourgame.ourgameserver.game.ingame;
 
 import com.ourgame.ourgameserver.game.Player;
 import com.ourgame.ourgameserver.game.pregame.Lobby;
-import com.ourgame.ourgameserver.game.pregame.LobbyException;
+import com.ourgame.ourgameserver.game.exceptions.LobbyException;
 import com.ourgame.ourgameserver.utils.observer.ObservableImpl;
 
 import java.util.Set;
 
 
+/**
+ * Game class for the game entity in an active phase
+ * Quite similar to Lobby class, but with some differences
+ * TODO add more differences or combine with lovvy
+ * TODO add description to observer
+ * TODO add pack indexing and getting questions map
+ */
 public class Game extends ObservableImpl {
     private final static int MAX_PLAYERS = 6;
     private Player host;
@@ -57,5 +64,4 @@ public class Game extends ObservableImpl {
         players.remove(player);
         lobby.removePlayer(player);
     }
-
 }

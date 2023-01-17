@@ -1,6 +1,7 @@
 package com.ourgame.ourgameserver.ws.controllers;
 
-import com.ourgame.ourgameserver.ws.controllers.dto.User;
+import com.ourgame.ourgameserver.ws.controllers.dto.LobbyDto;
+import com.ourgame.ourgameserver.ws.controllers.dto.UserDto;
 import com.ourgame.ourgameserver.ws.controllers.exceptions.CustomErrorMessage;
 import com.ourgame.ourgameserver.ws.model.exceptions.UserAlreadyExistsException;
 import com.ourgame.ourgameserver.ws.model.user.UserService;
@@ -13,22 +14,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api")
+@RequestMapping("/user")
 public class UsersController {
     private static final Logger LOG = LoggerFactory.getLogger(UsersController.class);
     private final TokenService tokenService;
     private final UserService userService;
-    private PasswordEncoder encoder;
 
     public UsersController(TokenService tokenService, UserService userService) {
         try {
-            userService.saveUser(new User("user",  "password", new SimpleGrantedAuthority("ROLE_USER")));
+            userService.saveUser(new UserDto("user",  "password", new SimpleGrantedAuthority("ROLE_USER")));
         } catch (UserAlreadyExistsException e) {}
         this.tokenService = tokenService;
         this.userService = userService;
@@ -38,14 +37,14 @@ public class UsersController {
     /**
      * This method is used to register a new user
      * @throws UserAlreadyExistsException in case user with this username already exists
-     * @param user user to be registered
+     * @param userDto user to be registered
      * @return ResponseEntity with status code and token in body
      */
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
-        user.setAuthorities(new SimpleGrantedAuthority("ROLE_USER"));
-        userService.saveUser(user);
-        LOG.info("Registering user {}", user);
+    public ResponseEntity<String> register(@RequestBody UserDto userDto) {
+        userDto.setAuthorities(new SimpleGrantedAuthority("ROLE_USER"));
+        userService.saveUser(userDto);
+        LOG.info("Registering user {}", userDto);
         return ResponseEntity.ok("User registered");
     }
 
