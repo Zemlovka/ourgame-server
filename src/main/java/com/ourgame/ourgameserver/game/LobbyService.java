@@ -3,17 +3,19 @@ package com.ourgame.ourgameserver.game;
 import com.ourgame.ourgameserver.game.pregame.Lobby;
 import com.ourgame.ourgameserver.utils.observer.Observer;
 import com.ourgame.ourgameserver.ws.controllers.dto.LobbyDto;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
-public class LobbyRepository implements Observer {
+@Service
+public class LobbyService implements Observer {
     private final List<Lobby> lobbys;
+    private final PlayerService playerService;
 
-    public LobbyRepository() {
+    public LobbyService(PlayerService playerService) {
         lobbys = new ArrayList<>();
+        this.playerService = playerService;
     }
 
     public Lobby getLobby(int lobbyId) {
@@ -28,13 +30,14 @@ public class LobbyRepository implements Observer {
         return lobbys.indexOf(lobby);
     }
 
-    public void createLobby(LobbyDto lobbyDto) {
+    public void createLobby(LobbyDto lobbyDto, String hostUsername) {
         Lobby lobby = new Lobby(
                 lobbys.size(),
                 lobbyDto.getName(),
-                lobbyDto.getHost(),
+                playerService.createPlayer(hostUsername),
                 lobbyDto.getPack(),
-                lobbyDto.getPassword());
+                lobbyDto.getPassword(),
+                lobbyDto.getMaxPlayers());
         lobbys.add(lobby);
     }
 
@@ -45,6 +48,6 @@ public class LobbyRepository implements Observer {
 
     @Override
     public void update() {
-
+        //TODO
     }
 }

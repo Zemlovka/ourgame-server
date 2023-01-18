@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UsersController {
     private static final Logger LOG = LoggerFactory.getLogger(UsersController.class);
     private final TokenService tokenService;

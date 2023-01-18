@@ -4,7 +4,6 @@ import com.ourgame.ourgameserver.game.Player;
 import com.ourgame.ourgameserver.game.exceptions.LobbyException;
 import com.ourgame.ourgameserver.game.pack.Pack;
 import com.ourgame.ourgameserver.utils.observer.ObservableImpl;
-import com.ourgame.ourgameserver.ws.controllers.dto.LobbyDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,20 +27,22 @@ public class Lobby extends ObservableImpl {
     private Player host;
     private Pack pack;
     private final Map<Player, Boolean> readyPlayers;
+    private int maxPlayers;
     private final String password;
     private boolean isPrivate;
     private LocalDateTime creationDate;
     private List<String> tags;
 
-    public Lobby(int id, String name, Player host, Pack pack, String password) {
+    public Lobby(int id, String name, Player host, Pack pack, String password, int maxPlayers) {
         readyPlayers = new HashMap<>();
+        readyPlayers.put(host, false);
         this.id = id;
         this.name = name;
         this.host = host;
-        readyPlayers.put(host, false);
         this.pack = pack;
         this.tags = pack.getTags();
         this.password = password;
+        this.maxPlayers = maxPlayers;
         this.creationDate = LocalDateTime.now();
     }
 
@@ -74,6 +75,24 @@ public class Lobby extends ObservableImpl {
         if (readyPlayers.containsKey(user)) {
             readyPlayers.put(user, true);
         }
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public int getReadyPlayerCount() {
+        int count = 0;
+        for (Map.Entry<Player, Boolean> entry : readyPlayers.entrySet()) {
+            if (entry.getValue()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getPlayerCount() {
+        return readyPlayers.keySet().size();
     }
 
 }

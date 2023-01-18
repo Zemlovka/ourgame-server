@@ -1,5 +1,8 @@
 package com.ourgame.ourgameserver.ws.controllers.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.ourgame.ourgameserver.game.Player;
 import com.ourgame.ourgameserver.game.pack.Pack;
 import com.ourgame.ourgameserver.game.pregame.Lobby;
@@ -17,16 +20,21 @@ import java.util.List;
  * TODO make pack mandatory (require its name or something)
  * TODO add other players
  */
-@Getter
-@Setter
 @Validated
 public class LobbyDto {
-    private int id;
-    @NotBlank private String name;
-    private Player host;
-    private Pack pack;
-    @NotBlank private  String password;
-    @NotNull private boolean isPrivate;
+    @Getter @Setter private int id;
+    @NotBlank
+    @Getter @Setter private String name;
+    @Getter @Setter private Player host;
+    @Getter @Setter private Pack pack;
+    @Getter private int players;
+    @Getter private int readyPlayers;
+    @NotNull
+    @Getter @Setter private int maxPlayers;
+    @NotBlank
+    private String password;
+    @NotNull
+    private boolean isPrivate;
 
     public LobbyDto() {
         this.pack = new Pack();
@@ -38,9 +46,32 @@ public class LobbyDto {
         this.host = lobby.getHost();
         this.pack = lobby.getPack();
         this.isPrivate = lobby.isPrivate();
+        this.players = lobby.getPlayerCount();
+        this.readyPlayers = lobby.getReadyPlayerCount();
+        this.maxPlayers = lobby.getMaxPlayers();
     }
 
     public static List<LobbyDto> fromLobbys(List<Lobby> lobbys) {
         return lobbys.stream().map(LobbyDto::new).toList();
+    }
+
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
+
+    @JsonSetter("password")
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @JsonAlias("isPrivate")
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    @JsonAlias("isPrivate")
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
     }
 }

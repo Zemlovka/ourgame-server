@@ -32,7 +32,7 @@ public class UserJpaEntity implements UserDetails {
     private GrantedAuthority authorities;
 
     @Column(name = "avatar", nullable = true)
-    private File avatar;
+    private String avatar;
 
 
     public UserJpaEntity() {
