@@ -27,7 +27,7 @@ public class Game extends ObservableImpl {
     public Game(Lobby lobby) {
         this.lobby = lobby;
         this.host = lobby.getHost();
-        this.players = lobby.getReadyPlayers().keySet();
+        this.players = lobby.getPlayers();
         this.chat = new Chat();
         this.theme = 0;
         this.round = 0;

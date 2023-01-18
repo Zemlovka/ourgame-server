@@ -8,9 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -26,7 +24,7 @@ public class Lobby extends ObservableImpl {
     private String name;
     private Player host;
     private Pack pack;
-    private final Map<Player, Boolean> readyPlayers;
+    private final Set<Player> players;
     private int maxPlayers;
     private final String password;
     private boolean isPrivate;
@@ -34,8 +32,8 @@ public class Lobby extends ObservableImpl {
     private List<String> tags;
 
     public Lobby(int id, String name, Player host, Pack pack, String password, int maxPlayers) {
-        readyPlayers = new HashMap<>();
-        readyPlayers.put(host, false);
+        players = new HashSet<>();
+        players.add(host);
         this.id = id;
         this.name = name;
         this.host = host;
@@ -51,33 +49,33 @@ public class Lobby extends ObservableImpl {
     }
 
     public void changeHost(Player newHost) {
-        if (readyPlayers.containsKey(newHost)) {
+        if (players.contains(newHost)) {
             host = newHost;
         }
     }
 
     public void deleteHost() {
-        if (readyPlayers.keySet().size() == 0) {
+        if (players.size() == 0) {
             // TODO delete lobby
         }
-        readyPlayers.remove(host);
-        this.host = readyPlayers.keySet().iterator().next();
+        players.remove(host);
+        this.host = players.iterator().next();
     }
 
-    public void addPlayer(Player players) {
-        if (readyPlayers.keySet().size() >= maxPlayers) {
+    public void addPlayer(Player player) {
+        if (players.size() >= maxPlayers) {
             throw new LobbyException("Max player limit is reached");
         }
-        readyPlayers.put(players, false);
+        players.add(player);
     }
 
     public void removePlayer(Player user) {
-        readyPlayers.remove(user);
+        players.remove(user);
     }
 
     public void setPlayerReady(Player user) {
-        if (readyPlayers.containsKey(user)) {
-            readyPlayers.put(user, true);
+        if (players.contains(user)) {
+            user.setReady(true);
         }
     }
 
@@ -85,18 +83,8 @@ public class Lobby extends ObservableImpl {
         return isPrivate;
     }
 
-    public int getReadyPlayerCount() {
-        int count = 0;
-        for (Map.Entry<Player, Boolean> entry : readyPlayers.entrySet()) {
-            if (entry.getValue()) {
-                count++;
-            }
-        }
-        return count;
-    }
-
     public int getPlayerCount() {
-        return readyPlayers.keySet().size();
+        return players.size();
     }
 
 }

@@ -13,6 +13,7 @@ import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -25,10 +26,11 @@ public class LobbyDto {
     @Getter @Setter private int id;
     @NotBlank
     @Getter @Setter private String name;
-    @Getter @Setter private Player host;
+    @Getter private Player host;
+    @Getter private Set<Player> players;
+
     @Getter @Setter private Pack pack;
-    @Getter private int players;
-    @Getter private int readyPlayers;
+    @Getter private int playersCount;
     @NotNull
     @Getter @Setter private int maxPlayers;
     @NotBlank
@@ -45,9 +47,9 @@ public class LobbyDto {
         this.name = lobby.getName();
         this.host = lobby.getHost();
         this.pack = lobby.getPack();
+        this.players = lobby.getPlayers();
         this.isPrivate = lobby.isPrivate();
-        this.players = lobby.getPlayerCount();
-        this.readyPlayers = lobby.getReadyPlayerCount();
+        this.playersCount = lobby.getPlayerCount();
         this.maxPlayers = lobby.getMaxPlayers();
     }
 

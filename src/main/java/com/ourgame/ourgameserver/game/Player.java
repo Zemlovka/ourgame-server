@@ -1,5 +1,6 @@
 package com.ourgame.ourgameserver.game;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ourgame.ourgameserver.utils.observer.ObservableImpl;
 import com.ourgame.ourgameserver.ws.model.user.UserJpaEntity;
 import lombok.Getter;
@@ -16,13 +17,17 @@ import lombok.Setter;
 @Setter
 public class Player extends ObservableImpl {
     private String username;
+    @JsonIgnore
     private String token; // TODO add method of authentication either by token or creating new token with password and username and comparing it
     private String avatar;
+    @JsonIgnore
     private int avgReactionTime;
+    private boolean isReady;
 
     public Player(UserJpaEntity user) {
         this.username = user.getUsername();
         this.avatar = user.getAvatar();
+        this.isReady = false;
     }
 
     public Player(String username) {
