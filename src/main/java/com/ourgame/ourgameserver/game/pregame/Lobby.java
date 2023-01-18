@@ -42,7 +42,11 @@ public class Lobby extends ObservableImpl {
         this.pack = pack;
         this.tags = pack.getTags();
         this.password = password;
-        this.maxPlayers = maxPlayers;
+        if (maxPlayers > MAX_PLAYERS) {
+            this.maxPlayers = MAX_PLAYERS;
+        } else {
+            this.maxPlayers = maxPlayers;
+        }
         this.creationDate = LocalDateTime.now();
     }
 
@@ -61,7 +65,7 @@ public class Lobby extends ObservableImpl {
     }
 
     public void addPlayer(Player players) {
-        if (readyPlayers.keySet().size() >= MAX_PLAYERS) {
+        if (readyPlayers.keySet().size() >= maxPlayers) {
             throw new LobbyException("Max player limit is reached");
         }
         readyPlayers.put(players, false);
