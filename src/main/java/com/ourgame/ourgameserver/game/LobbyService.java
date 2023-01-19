@@ -1,5 +1,7 @@
 package com.ourgame.ourgameserver.game;
 
+import com.ourgame.ourgameserver.game.exceptions.LobbyException;
+import com.ourgame.ourgameserver.game.exceptions.LobbyNotFoundException;
 import com.ourgame.ourgameserver.game.pregame.Lobby;
 import com.ourgame.ourgameserver.utils.observer.Observer;
 import com.ourgame.ourgameserver.ws.controllers.dto.LobbyDto;
@@ -38,7 +40,24 @@ public class LobbyService implements Observer {
                 lobbyDto.getPack(),
                 lobbyDto.getPassword(),
                 lobbyDto.getMaxPlayers());
-        lobbys.add(lobby);
+//        if (lobbys.contains(lobby)) { TODO
+//            throw new LobbyException("Lobby already exists");
+//        }
+        if (!lobbys.contains(lobby)) {
+            lobbys.add(lobby);
+        }
+    }
+
+    public void addPlayerToLobby(int lobbyId, String username) {
+        Lobby lobby = lobbys.get(lobbyId);
+        Player player = playerService.createPlayer(username);
+        if (lobby == null) {
+            throw new LobbyNotFoundException("Lobby not found");
+        }
+        if (lobby.getPlayers().contains(player)) {
+            throw new LobbyException("Player already in lobby");
+        }
+        lobby.addPlayer(player);
     }
 
     public void deleteLobby(int lobbyId) {

@@ -46,6 +46,23 @@ public class LobbyController {
         return new ResponseEntity<>("Lobby created", HttpStatus.CREATED);
     }
 
+    @PostMapping("/createList")
+    @Deprecated //TODO remove
+    public ResponseEntity<String> createMoreLobby(Authentication authentication,
+                                              @Valid @RequestBody List<LobbyDto> lobbyDto) {
+        for (LobbyDto lobby : lobbyDto) {
+            lobbyService.createLobby(lobby, authentication.getName());
+        }
+        return new ResponseEntity<>("Lobbies were created", HttpStatus.CREATED);
+    }
+
+    @PostMapping("/join/{lobbyId}")
+    public ResponseEntity<String> joinLobby(Authentication authentication,
+                                            @PathVariable int lobbyId) {
+        lobbyService.addPlayerToLobby(lobbyId, authentication.getName());
+        return new ResponseEntity<>("Joined lobby", HttpStatus.OK);
+    }
+
     @PostMapping("/delete/{lobbyId}")
     public ResponseEntity<String> deleteLobby(Authentication authentication, @PathVariable int lobbyId) {
         if (lobbyService.getLobby(lobbyId).getHost().getUsername()

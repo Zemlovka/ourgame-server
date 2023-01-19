@@ -29,6 +29,12 @@ public class UsersController {
         try {
             userService.saveUser(new UserDto("user",  "password", new SimpleGrantedAuthority("ROLE_USER")));
         } catch (UserAlreadyExistsException e) {}
+        try {
+            userService.saveUser(new UserDto("user1",  "password", new SimpleGrantedAuthority("ROLE_USER")));
+        } catch (UserAlreadyExistsException e) {}
+        try {
+            userService.saveUser(new UserDto("user2",  "password", new SimpleGrantedAuthority("ROLE_USER")));
+        } catch (UserAlreadyExistsException e) {}
         this.tokenService = tokenService;
         this.userService = userService;
     }

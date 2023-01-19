@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.ourgame.ourgameserver.game.Player;
 import com.ourgame.ourgameserver.game.pack.Pack;
 import com.ourgame.ourgameserver.game.pregame.Lobby;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -31,6 +33,8 @@ public class LobbyDto {
 
     @Getter @Setter private Pack pack;
     @Getter private int playersCount;
+    @Min(3)
+    @Max(10)
     @NotNull
     @Getter @Setter private int maxPlayers;
     @NotBlank

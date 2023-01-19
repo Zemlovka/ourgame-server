@@ -23,6 +23,7 @@ public class Player extends ObservableImpl {
     @JsonIgnore
     private int avgReactionTime;
     private boolean isReady;
+    private boolean busy;
 
     public Player(UserJpaEntity user) {
         this.username = user.getUsername();
