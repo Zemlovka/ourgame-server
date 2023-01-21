@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UsersController {
     private static final Logger LOG = LoggerFactory.getLogger(UsersController.class);
     private final TokenService tokenService;
@@ -28,6 +28,12 @@ public class UsersController {
     public UsersController(TokenService tokenService, UserService userService) {
         try {
             userService.saveUser(new UserDto("user",  "password", new SimpleGrantedAuthority("ROLE_USER")));
+        } catch (UserAlreadyExistsException e) {}
+        try {
+            userService.saveUser(new UserDto("user1",  "password", new SimpleGrantedAuthority("ROLE_USER")));
+        } catch (UserAlreadyExistsException e) {}
+        try {
+            userService.saveUser(new UserDto("user2",  "password", new SimpleGrantedAuthority("ROLE_USER")));
         } catch (UserAlreadyExistsException e) {}
         this.tokenService = tokenService;
         this.userService = userService;

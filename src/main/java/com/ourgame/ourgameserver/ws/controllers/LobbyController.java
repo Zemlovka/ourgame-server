@@ -1,6 +1,6 @@
 package com.ourgame.ourgameserver.ws.controllers;
 
-import com.ourgame.ourgameserver.game.LobbyRepository;
+import com.ourgame.ourgameserver.game.LobbyService;
 import com.ourgame.ourgameserver.game.Player;
 import com.ourgame.ourgameserver.game.exceptions.LobbyNotFoundException;
 import com.ourgame.ourgameserver.game.pregame.Lobby;
@@ -16,23 +16,23 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/lobby")
+@RequestMapping("/api/lobby")
 public class LobbyController {
-    private final LobbyRepository lobbyRepository;
+    private final LobbyService lobbyService;
 
-    public LobbyController(LobbyRepository lobbyRepository) {
-        this.lobbyRepository = lobbyRepository;
+    public LobbyController(LobbyService lobbyService) {
+        this.lobbyService = lobbyService;
     }
 
     @GetMapping("")
     public ResponseEntity<List<LobbyDto>> getLobbys() {
-        List<Lobby> lobbys = lobbyRepository.getLobbys();
+        List<Lobby> lobbys = lobbyService.getLobbys();
         return ResponseEntity.ok(LobbyDto.fromLobbys(lobbys));
     }
 
     @GetMapping("/{lobbyId}")
     public ResponseEntity<LobbyDto> getLobby(@PathVariable int lobbyId) {
-        Lobby lobby = lobbyRepository.getLobby(lobbyId);
+        Lobby lobby = lobbyService.getLobby(lobbyId);
         if (lobby == null) {
             throw new LobbyNotFoundException("Lobby not found");
         }
@@ -42,16 +42,32 @@ public class LobbyController {
     @PostMapping("/create")
     public ResponseEntity<String> createLobby(Authentication authentication,
                                               @Valid @RequestBody LobbyDto lobbyDto) {
-        lobbyDto.setHost(new Player(authentication.getName()));
-        lobbyRepository.createLobby(lobbyDto);
+        lobbyService.createLobby(lobbyDto, authentication.getName());
         return new ResponseEntity<>("Lobby created", HttpStatus.CREATED);
+    }
+
+    @PostMapping("/createList")
+    @Deprecated //TODO remove
+    public ResponseEntity<String> createMoreLobby(Authentication authentication,
+                                              @Valid @RequestBody List<LobbyDto> lobbyDto) {
+        for (LobbyDto lobby : lobbyDto) {
+            lobbyService.createLobby(lobby, authentication.getName());
+        }
+        return new ResponseEntity<>("Lobbies were created", HttpStatus.CREATED);
+    }
+
+    @PostMapping("/join/{lobbyId}")
+    public ResponseEntity<String> joinLobby(Authentication authentication,
+                                            @PathVariable int lobbyId) {
+        lobbyService.addPlayerToLobby(lobbyId, authentication.getName());
+        return new ResponseEntity<>("Joined lobby", HttpStatus.OK);
     }
 
     @PostMapping("/delete/{lobbyId}")
     public ResponseEntity<String> deleteLobby(Authentication authentication, @PathVariable int lobbyId) {
-        if (lobbyRepository.getLobby(lobbyId).getHost().getUsername()
+        if (lobbyService.getLobby(lobbyId).getHost().getUsername()
                 .equals(authentication.getName())) {
-            lobbyRepository.deleteLobby(lobbyId);
+            lobbyService.deleteLobby(lobbyId);
             return ResponseEntity.ok("Lobby deleted");
         }
         return ResponseEntity.badRequest().body("You are not the host of this lobby");
