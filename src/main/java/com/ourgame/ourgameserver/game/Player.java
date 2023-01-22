@@ -3,6 +3,7 @@ package com.ourgame.ourgameserver.game;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ourgame.ourgameserver.utils.observer.ObservableImpl;
 import com.ourgame.ourgameserver.ws.model.user.UserJpaEntity;
+import com.ourgame.ourgameserver.ws.sockets.dto.PlayerSocDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,6 +30,11 @@ public class Player extends ObservableImpl {
         this.username = user.getUsername();
         this.avatar = user.getAvatar();
         this.isReady = false;
+    }
+
+    public Player(PlayerSocDto playerSocDto) {
+        this.username = playerSocDto.getUsername();
+        this.token = playerSocDto.getToken();
     }
 
     public Player(String username) {
