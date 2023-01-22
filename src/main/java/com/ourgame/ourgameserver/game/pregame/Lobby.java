@@ -76,18 +76,35 @@ public class Lobby extends ObservableImpl {
         players.remove(user);
     }
 
-    public void setPlayerReady(Player user) {
-        if (players.containsValue(user)) {
-            user.setReady(true);
+    public void setPlayerReadyStatus(Player player, boolean isReady) {
+        if (players.containsValue(player)) {
+            players.get(player.getUsername()).setReady(isReady);
         }
     }
 
+    public boolean arePlayersReady() {
+        for (Player player : players.values()) {
+            if (!player.isReady()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //TODO add exceptions
+    public boolean isConnectable(Player player) {
+        return players.size() < maxPlayers && !players.containsValue(player);
+    }
     public boolean isPrivate() {
         return isPrivate;
     }
 
     public int getPlayerCount() {
         return players.size();
+    }
+
+    public Set<Player> getPlayers() {
+        return new HashSet<>(players.values());
     }
 
 }
