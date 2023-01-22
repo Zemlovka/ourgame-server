@@ -5,6 +5,7 @@ import com.ourgame.ourgameserver.game.Player;
 import com.ourgame.ourgameserver.game.exceptions.LobbyNotFoundException;
 import com.ourgame.ourgameserver.game.pregame.Lobby;
 import com.ourgame.ourgameserver.ws.controllers.dto.LobbyDto;
+import com.ourgame.ourgameserver.ws.sockets.SocketServer;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,11 @@ import java.util.List;
 @RequestMapping("/api/lobby")
 public class LobbyController {
     private final LobbyService lobbyService;
+    SocketServer socketServer;
 
-    public LobbyController(LobbyService lobbyService) {
+    public LobbyController(LobbyService lobbyService, SocketServer socketServer) {
         this.lobbyService = lobbyService;
+        this.socketServer = socketServer;
     }
 
     @GetMapping("")
@@ -42,8 +45,19 @@ public class LobbyController {
     @PostMapping("/create")
     public ResponseEntity<String> createLobby(Authentication authentication,
                                               @Valid @RequestBody LobbyDto lobbyDto) {
-        lobbyService.createLobby(lobbyDto, authentication.getName());
-        return new ResponseEntity<>("Lobby created", HttpStatus.CREATED);
+        Lobby lobby = lobbyService.createLobby(lobbyDto, authentication.getName());
+        return new ResponseEntity<>(socketServer.createLobbyNamespace(lobby), HttpStatus.SWITCHING_PROTOCOLS);
+    }
+
+    @PostMapping("/join/{lobbyId}")
+    public ResponseEntity<String> joinLobby(Authentication authentication,
+                                            @PathVariable int lobbyId) {
+        Lobby lobby = lobbyService.getLobby(lobbyId);
+        if (lobby.isConnectable(new Player(authentication.getName()))) {
+            return new ResponseEntity<>(socketServer.getLobbyNamespace(lobby), HttpStatus.SWITCHING_PROTOCOLS);
+        }
+        //TODO add error message making sense
+        return new ResponseEntity<>("Lobby not connectable", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/createList")
@@ -54,13 +68,6 @@ public class LobbyController {
             lobbyService.createLobby(lobby, authentication.getName());
         }
         return new ResponseEntity<>("Lobbies were created", HttpStatus.CREATED);
-    }
-
-    @PostMapping("/join/{lobbyId}")
-    public ResponseEntity<String> joinLobby(Authentication authentication,
-                                            @PathVariable int lobbyId) {
-        lobbyService.addPlayerToLobby(lobbyId, authentication.getName());
-        return new ResponseEntity<>("Joined lobby", HttpStatus.OK);
     }
 
     @PostMapping("/delete/{lobbyId}")

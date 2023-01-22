@@ -17,7 +17,7 @@ public class PlayerService {
         this.playerSet = new HashSet<>();
     }
 
-    public Player createPlayer(String username) {
+    public Player getPlayer(String username) {
         Player player = new Player(userService.loadUserByUsername(username));
         if (playerSet.contains(player)) {
             return player;

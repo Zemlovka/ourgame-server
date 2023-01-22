@@ -32,11 +32,11 @@ public class LobbyService implements Observer {
         return lobbys.indexOf(lobby);
     }
 
-    public void createLobby(LobbyDto lobbyDto, String hostUsername) {
+    public Lobby createLobby(LobbyDto lobbyDto, String hostUsername) {
         Lobby lobby = new Lobby(
                 lobbys.size(),
                 lobbyDto.getName(),
-                playerService.createPlayer(hostUsername),
+                playerService.getPlayer(hostUsername),
                 lobbyDto.getPack(),
                 lobbyDto.getPassword(),
                 lobbyDto.getMaxPlayers());
@@ -46,18 +46,20 @@ public class LobbyService implements Observer {
         if (!lobbys.contains(lobby)) {
             lobbys.add(lobby);
         }
+        return lobby;
     }
 
-    public void addPlayerToLobby(int lobbyId, String username) {
+    //TODO move to lobby
+    public boolean isLobbyConnectable(int lobbyId, String username) {
         Lobby lobby = lobbys.get(lobbyId);
-        Player player = playerService.createPlayer(username);
+        Player player = playerService.getPlayer(username);
         if (lobby == null) {
             throw new LobbyNotFoundException("Lobby not found");
         }
         if (lobby.getPlayers().contains(player)) {
             throw new LobbyException("Player already in lobby");
         }
-        lobby.addPlayer(player);
+        return true;
     }
 
     public void deleteLobby(int lobbyId) {
