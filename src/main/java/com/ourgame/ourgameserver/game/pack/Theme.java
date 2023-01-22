@@ -1,12 +1,12 @@
 package com.ourgame.ourgameserver.game.pack;
 
 public class Theme {
-    public Questions getQuestions() {
+    public Theme.Questions getQuestions() {
         return this.Questions;
     }
 
-    public void setQuestions(Questions questions) {
-        this.Questions = questions;
+    public <Questions> void setQuestions(Questions questions) {
+        this.Questions = (Theme.Questions) questions;
     }
 
     Questions Questions;
@@ -30,4 +30,7 @@ public class Theme {
     }
 
     String Text;
+
+    public class Questions {
+    }
 }
