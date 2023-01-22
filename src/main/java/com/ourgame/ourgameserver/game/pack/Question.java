@@ -5,8 +5,8 @@ public class Question {
         return this.Scenario;
     }
 
-    public void setScenario(Scenario Scenario) {
-        this.Scenario = Scenario;
+    public void setScenario(Scenario scenario) {
+        this.Scenario = scenario;
     }
 
     Scenario Scenario;
@@ -15,8 +15,8 @@ public class Question {
         return this.Right;
     }
 
-    public void setRight(Right Right) {
-        this.Right = Right;
+    public void setRight(Right right) {
+        this.Right = right;
     }
 
     Right Right;
@@ -45,8 +45,8 @@ public class Question {
         return this.Type;
     }
 
-    public void setType(Type Type) {
-        this.Type = Type;
+    public void setType(Type type) {
+        this.Type = type;
     }
 
     Type Type;
@@ -55,8 +55,8 @@ public class Question {
         return this.Wrong;
     }
 
-    public void setWrong(Wrong Wrong) {
-        this.Wrong = Wrong;
+    public void setWrong(Wrong wrong) {
+        this.Wrong = wrong;
     }
 
     Wrong Wrong;

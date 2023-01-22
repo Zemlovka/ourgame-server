@@ -17,8 +17,8 @@ public class Type {
         return this.Param;
     }
 
-    public void setParam(List<Param> Param) {
-        this.Param = Param;
+    public void setParam(List<Param> param) {
+        this.Param = param;
     }
 
     List<Param> Param;

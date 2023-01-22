@@ -5,8 +5,8 @@ public class Round {
         return this.Themes;
     }
 
-    public void setThemes(Themes Themes) {
-        this.Themes = Themes;
+    public void setThemes(Themes themes) {
+        this.Themes = themes;
     }
 
     Themes Themes;

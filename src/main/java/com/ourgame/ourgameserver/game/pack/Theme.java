@@ -5,8 +5,8 @@ public class Theme {
         return this.Questions;
     }
 
-    public void setQuestions(Questions Questions) {
-        this.Questions = Questions;
+    public void setQuestions(Questions questions) {
+        this.Questions = questions;
     }
 
     Questions Questions;

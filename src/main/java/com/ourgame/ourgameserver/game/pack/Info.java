@@ -5,8 +5,8 @@ public class Info {
         return this.Authors;
     }
 
-    public void setAuthors(Authors Authors) {
-        this.Authors = Authors;
+    public void setAuthors(Authors authors) {
+        this.Authors = authors;
     }
 
     Authors Authors;

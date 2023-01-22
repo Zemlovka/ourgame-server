@@ -7,8 +7,8 @@ public class Themes {
         return this.Theme;
     }
 
-    public void setTheme(List<Theme> Theme) {
-        this.Theme = Theme;
+    public void setTheme(List<Theme> themes) {
+        this.Theme = themes;
     }
 
     List<Theme> Theme;

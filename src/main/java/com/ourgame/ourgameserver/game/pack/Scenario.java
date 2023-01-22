@@ -7,8 +7,8 @@ public class Scenario {
         return this.Atom;
     }
 
-    public void setAtom(List<Atom> Atom) {
-        this.Atom = Atom;
+    public void setAtom(List<Atom> atom) {
+        this.Atom = atom;
     }
 
     List<Atom> Atom;

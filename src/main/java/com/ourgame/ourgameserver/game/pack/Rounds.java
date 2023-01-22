@@ -7,8 +7,8 @@ public class Rounds {
         return this.Round;
     }
 
-    public void setRound(List<Round> Round) {
-        this.Round = Round;
+    public void setRound(List<Round> round) {
+        this.Round = round;
     }
 
     List<Round> Round;

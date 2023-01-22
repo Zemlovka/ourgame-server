@@ -7,8 +7,8 @@ public class Questions {
         return this.Question;
     }
 
-    public void setQuestion(List<Question> Question) {
-        this.Question = Question;
+    public void setQuestion(List<Question> question) {
+        this.Question = question;
     }
 
     List<Question> Question;
