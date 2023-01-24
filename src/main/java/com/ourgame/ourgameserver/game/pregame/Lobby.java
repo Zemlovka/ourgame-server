@@ -2,7 +2,7 @@ package com.ourgame.ourgameserver.game.pregame;
 
 import com.ourgame.ourgameserver.game.Player;
 import com.ourgame.ourgameserver.game.exceptions.LobbyException;
-import com.ourgame.ourgameserver.game.pack.Pack;
+import com.ourgame.ourgameserver.game.pack.Package;
 import com.ourgame.ourgameserver.utils.observer.ObservableImpl;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +24,7 @@ public class Lobby extends ObservableImpl {
     private final int id;
     private String name;
     private Player host;
-    private Pack pack;
+    private Package aPackage;
     private final Set<Player> players;
     private int maxPlayers;
     private final String password;
@@ -32,14 +32,14 @@ public class Lobby extends ObservableImpl {
     private LocalDateTime creationDate;
     private List<String> tags;
 
-    public Lobby(int id, String name, Player host, Pack pack, String password, int maxPlayers) {
+    public Lobby(int id, String name, Player host, Package aPackage, String password, int maxPlayers) {
         players = new HashSet<>();
         players.add(host);
         this.id = id;
         this.name = name;
         this.host = host;
-        this.pack = pack;
-        this.tags = pack.getTags();
+        this.aPackage = aPackage;
+//        this.tags = aPackage.getTags();
         this.password = password;
         if (maxPlayers > MAX_PLAYERS) {
             this.maxPlayers = MAX_PLAYERS;

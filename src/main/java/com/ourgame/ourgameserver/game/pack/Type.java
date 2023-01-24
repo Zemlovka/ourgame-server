@@ -1,35 +1,16 @@
 package com.ourgame.ourgameserver.game.pack;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.List;
 
 public class Type {
-    public String getName() {
-        return this.Name;
-    }
+    @XmlAttribute
+    private String name;
 
-    public void setName(String Name) {
-        this.Name = Name;
-    }
-
-    String Name;
-
-    public List<Param> getParam() {
-        return this.Param;
-    }
-
-    public void setParam(List<Param> param) {
-        this.Param = param;
-    }
-
-    List<Param> Param;
-
-    public String getText() {
-        return this.Text;
-    }
-
-    public void setText(String Text) {
-        this.Text = Text;
-    }
-
-    String Text;
+    @XmlElement(name = "param")
+    private List<Param> params;
 }

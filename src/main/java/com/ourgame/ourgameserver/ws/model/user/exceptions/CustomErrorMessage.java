@@ -1,4 +1,4 @@
-package com.ourgame.ourgameserver.ws.controllers.exceptions;
+package com.ourgame.ourgameserver.ws.model.user.exceptions;
 
 public class CustomErrorMessage {
     private int statusCode;

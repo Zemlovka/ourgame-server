@@ -1,33 +1,18 @@
 package com.ourgame.ourgameserver.game.pack;
 
+import lombok.Getter;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import java.util.List;
+
+@Getter
 public class Theme {
-    public Questions getQuestions() {
-        return this.Questions;
-    }
+    @XmlElementWrapper(name = "questions")
+    @XmlElement(name = "question")
+    List<Question> questions;
 
-    public void setQuestions(Questions questions) {
-        this.Questions = questions;
-    }
-
-    Questions Questions;
-
-    public String getName() {
-        return this.Name;
-    }
-
-    public void setName(String Name) {
-        this.Name = Name;
-    }
-
-    String Name;
-
-    public String getText() {
-        return this.Text;
-    }
-
-    public void setText(String Text) {
-        this.Text = Text;
-    }
-
-    String Text;
+    @XmlAttribute
+    String name;
 }

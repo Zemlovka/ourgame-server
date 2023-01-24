@@ -1,23 +1,16 @@
 package com.ourgame.ourgameserver.game.pack;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlValue;
+
+@Getter
 public class Atom {
-    public String getType() {
-        return this.Type;
-    }
+    @XmlAttribute
+    private String type;
 
-    public void setType(String Type) {
-        this.Type = Type;
-    }
-
-    String Type;
-
-    public String getText() {
-        return this.Text;
-    }
-
-    public void setText(String Text) {
-        this.Text = Text;
-    }
-
-    String Text;
+    @XmlValue
+    private String text;
 }

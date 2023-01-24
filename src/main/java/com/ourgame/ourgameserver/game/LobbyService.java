@@ -37,7 +37,7 @@ public class LobbyService implements Observer {
                 lobbys.size(),
                 lobbyDto.getName(),
                 playerService.createPlayer(hostUsername),
-                lobbyDto.getPack(),
+                lobbyDto.getAPackage(),
                 lobbyDto.getPassword(),
                 lobbyDto.getMaxPlayers());
 //        if (lobbys.contains(lobby)) { TODO

@@ -1,43 +1,19 @@
 package com.ourgame.ourgameserver.game.pack;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import java.util.List;
+
+@Getter
 public class Round {
-    public Themes getThemes() {
-        return this.Themes;
-    }
+    @XmlElementWrapper(name = "themes")
+    @XmlElement(name = "theme")
+    private List<Theme> Themes;
 
-    public void setThemes(Themes themes) {
-        this.Themes = themes;
-    }
-
-    Themes Themes;
-
-    public String getName() {
-        return this.Name;
-    }
-
-    public void setName(String Name) {
-        this.Name = Name;
-    }
-
-    String Name;
-
-    public String getText() {
-        return this.Text;
-    }
-
-    public void setText(String Text) {
-        this.Text = Text;
-    }
-
-    String Text;
-
-    public String getType() {
-        return this.Type;
-    }
-
-    public void setType(String Type) {
-        this.Type = Type;
-    }
-
-    String Type;
+    @XmlAttribute(name = "name")
+    private String name;
 }

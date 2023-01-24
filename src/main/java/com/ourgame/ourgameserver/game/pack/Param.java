@@ -1,23 +1,15 @@
 package com.ourgame.ourgameserver.game.pack;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlValue;
+
 public class Param {
-    public String getName() {
-        return this.Name;
-    }
+    @XmlAttribute
+    private String name;
 
-    public void setName(String Name) {
-        this.Name = Name;
-    }
-
-    String Name;
-
-    public String getText() {
-        return this.Text;
-    }
-
-    public void setText(String Text) {
-        this.Text = Text;
-    }
-
-    String Text;
+    @XmlValue
+    private String text;
 }

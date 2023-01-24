@@ -1,0 +1,15 @@
+package com.ourgame.ourgameserver.game.pack;
+
+import lombok.Getter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+
+@XmlRootElement(name = "author")
+@XmlAccessorType(XmlAccessType.FIELD)
+@Getter
+public class Author {
+    private String author;
+}

@@ -1,4 +1,4 @@
-package com.ourgame.ourgameserver.ws.security.service;
+package com.ourgame.ourgameserver.ws.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
