@@ -93,7 +93,8 @@ public class Lobby extends ObservableImpl {
 
     //TODO add exceptions
     public boolean isConnectable(Player player) {
-        return players.size() < maxPlayers && !players.containsValue(player);
+//        return players.size() < maxPlayers && !players.containsValue(player);
+        return true;
     }
     public boolean isPrivate() {
         return isPrivate;

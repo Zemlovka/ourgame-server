@@ -46,7 +46,7 @@ public class LobbyController {
     public ResponseEntity<String> createLobby(Authentication authentication,
                                               @Valid @RequestBody LobbyDto lobbyDto) {
         Lobby lobby = lobbyService.createLobby(lobbyDto, authentication.getName());
-        return new ResponseEntity<>(socketServer.createLobbyNamespace(lobby), HttpStatus.SWITCHING_PROTOCOLS);
+        return new ResponseEntity<>(socketServer.createLobbyNamespace(lobby), HttpStatus.OK);
     }
 
     @PostMapping("/join/{lobbyId}")
@@ -54,7 +54,7 @@ public class LobbyController {
                                             @PathVariable int lobbyId) {
         Lobby lobby = lobbyService.getLobby(lobbyId);
         if (lobby.isConnectable(new Player(authentication.getName()))) {
-            return new ResponseEntity<>(socketServer.getLobbyNamespace(lobby), HttpStatus.SWITCHING_PROTOCOLS);
+            return new ResponseEntity<>(socketServer.getLobbyNamespace(lobby), HttpStatus.OK);
         }
         //TODO add error message making sense
         return new ResponseEntity<>("Lobby not connectable", HttpStatus.BAD_REQUEST);
@@ -63,9 +63,10 @@ public class LobbyController {
     @PostMapping("/createList")
     @Deprecated //TODO remove
     public ResponseEntity<String> createMoreLobby(Authentication authentication,
-                                              @Valid @RequestBody List<LobbyDto> lobbyDto) {
-        for (LobbyDto lobby : lobbyDto) {
-            lobbyService.createLobby(lobby, authentication.getName());
+                                              @Valid @RequestBody List<LobbyDto> lobbyDtoList) {
+        for (LobbyDto lobbyDto : lobbyDtoList) {
+            Lobby lobby = lobbyService.createLobby(lobbyDto, authentication.getName());
+            socketServer.createLobbyNamespace(lobby);
         }
         return new ResponseEntity<>("Lobbies were created", HttpStatus.CREATED);
     }

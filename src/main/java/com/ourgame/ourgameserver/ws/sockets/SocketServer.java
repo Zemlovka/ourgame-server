@@ -35,9 +35,10 @@ public class SocketServer {
     }
 
     public String getLobbyNamespace(Lobby lobby) {
-        if (lobbySocketsMap.containsKey(lobby)); {
-             return ":" + PORT + PATH + "/" + lobby.getId();
+        if (lobbySocketsMap.containsKey(lobby)) {
+            return ":" + PORT + PATH + "/" + lobby.getId();
         }
+        return null;
     }
 
     public void deleteLobbyNamespace(Lobby lobby) {
