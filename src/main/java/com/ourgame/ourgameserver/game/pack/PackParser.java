@@ -9,16 +9,15 @@ import java.util.List;
 
 public class PackParser {
     public static void main(String[] args) throws JAXBException {
-        new PackParser();
+        System.out.println(getPackage("testPack"));
     }
 
-    public PackParser() throws JAXBException {
-        System.out.println(parseFolderToPack(""));
+    private PackParser() {
     }
 
-    public Package parseFolderToPack(String folderPath) throws JAXBException {
+    public static Package getPackage(String packName) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(Package.class);
-        StreamSource xml = new StreamSource("src/main/resources/content.xml");
+        StreamSource xml = new StreamSource("src/main/resources/packs/" + packName + "/content.xml");
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
         JAXBElement<Package> jaxbElement = unmarshaller.unmarshal(xml, Package.class);
         Package pack = jaxbElement.getValue();
