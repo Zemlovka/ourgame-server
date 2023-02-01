@@ -1,4 +1,4 @@
-package com.ourgame.ourgameserver.ws.controllers.dto;
+package com.ourgame.ourgameserver.ws.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.json.JSONObject;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
@@ -50,7 +51,7 @@ public class LobbyDto {
         this.id = lobby.getId();
         this.name = lobby.getName();
         this.host = lobby.getHost();
-        this.aPackage = lobby.getAPackage();
+        this.aPackage = lobby.getPack();
         this.players = lobby.getPlayers();
         this.isPrivate = lobby.isPrivate();
         this.playersCount = lobby.getPlayerCount();
@@ -79,5 +80,9 @@ public class LobbyDto {
     @JsonAlias("isPrivate")
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
+    }
+
+    public JSONObject toJson() {
+        return new JSONObject(this);
     }
 }
