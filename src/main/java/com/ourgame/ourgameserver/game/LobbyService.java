@@ -2,6 +2,8 @@ package com.ourgame.ourgameserver.game;
 
 import com.ourgame.ourgameserver.game.exceptions.LobbyException;
 import com.ourgame.ourgameserver.game.exceptions.LobbyNotFoundException;
+import com.ourgame.ourgameserver.game.exceptions.PackageException;
+import com.ourgame.ourgameserver.game.pack.PackParser;
 import com.ourgame.ourgameserver.game.pack.Package;
 import com.ourgame.ourgameserver.game.pregame.Lobby;
 import com.ourgame.ourgameserver.utils.observer.Observer;
@@ -9,6 +11,7 @@ import com.ourgame.ourgameserver.ws.dto.LobbyDto;
 import com.ourgame.ourgameserver.ws.sockets.SocketServer;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,19 +41,22 @@ public class LobbyService implements Observer {
     }
 
     public Lobby createLobby(LobbyDto lobbyDto, String hostUsername) {
-        Lobby lobby = new Lobby(
-                lobbys.size(),
-                lobbyDto.getName(),
-                playerService.getPlayer(hostUsername),
-                lobbyDto.getAPackage(),
-                lobbyDto.getPassword(),
-                lobbyDto.getMaxPlayers());
-//        if (lobbys.contains(lobby)) { TODO
-//            throw new LobbyException("Lobby already exists");
-//        }
-        if (!lobbys.contains(lobby)) {
-            lobbys.add(lobby);
+        Lobby lobby;
+        try {
+            lobby = new Lobby(
+                    lobbys.size(),
+                    lobbyDto.getName(),
+                    playerService.getPlayer(hostUsername),
+                    PackParser.getPackage(lobbyDto.getPackageName()),
+                    lobbyDto.getPassword(),
+                    lobbyDto.getMaxPlayers());
+            if (lobbys.contains(lobby)) { //TODO
+                throw new LobbyException("Lobby already exists");
+            }
+        } catch (JAXBException e) {
+            throw new PackageException("Package not found or corrupted");
         }
+        lobbys.add(lobby);
         return lobby;
     }
 
