@@ -2,9 +2,11 @@ package com.ourgame.ourgameserver.game;
 
 import com.ourgame.ourgameserver.game.exceptions.LobbyException;
 import com.ourgame.ourgameserver.game.exceptions.LobbyNotFoundException;
+import com.ourgame.ourgameserver.game.pack.Pack;
 import com.ourgame.ourgameserver.game.pregame.Lobby;
 import com.ourgame.ourgameserver.utils.observer.Observer;
-import com.ourgame.ourgameserver.ws.controllers.dto.LobbyDto;
+import com.ourgame.ourgameserver.ws.dto.LobbyDto;
+import com.ourgame.ourgameserver.ws.sockets.SocketServer;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,9 +17,12 @@ public class LobbyService implements Observer {
     private final List<Lobby> lobbys;
     private final PlayerService playerService;
 
-    public LobbyService(PlayerService playerService) {
+    public LobbyService(PlayerService playerService, /*TODO: remove this*/SocketServer socketServer) {
         lobbys = new ArrayList<>();
         this.playerService = playerService;
+        //TODO: remove this
+        lobbys.add(new Lobby(0, "Lobby 1", playerService.getPlayer("user"), new Pack(), "234",6));
+        socketServer.createLobbyNamespace(lobbys.get(0));
     }
 
     public Lobby getLobby(int lobbyId) {
@@ -32,11 +37,11 @@ public class LobbyService implements Observer {
         return lobbys.indexOf(lobby);
     }
 
-    public void createLobby(LobbyDto lobbyDto, String hostUsername) {
+    public Lobby createLobby(LobbyDto lobbyDto, String hostUsername) {
         Lobby lobby = new Lobby(
                 lobbys.size(),
                 lobbyDto.getName(),
-                playerService.createPlayer(hostUsername),
+                playerService.getPlayer(hostUsername),
                 lobbyDto.getPack(),
                 lobbyDto.getPassword(),
                 lobbyDto.getMaxPlayers());
@@ -46,18 +51,20 @@ public class LobbyService implements Observer {
         if (!lobbys.contains(lobby)) {
             lobbys.add(lobby);
         }
+        return lobby;
     }
 
-    public void addPlayerToLobby(int lobbyId, String username) {
+    //TODO move to lobby
+    public boolean isLobbyConnectable(int lobbyId, String username) {
         Lobby lobby = lobbys.get(lobbyId);
-        Player player = playerService.createPlayer(username);
+        Player player = playerService.getPlayer(username);
         if (lobby == null) {
             throw new LobbyNotFoundException("Lobby not found");
         }
         if (lobby.getPlayers().contains(player)) {
             throw new LobbyException("Player already in lobby");
         }
-        lobby.addPlayer(player);
+        return true;
     }
 
     public void deleteLobby(int lobbyId) {

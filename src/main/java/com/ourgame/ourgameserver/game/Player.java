@@ -1,6 +1,7 @@
 package com.ourgame.ourgameserver.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ourgame.ourgameserver.game.pregame.Lobby;
 import com.ourgame.ourgameserver.utils.observer.ObservableImpl;
 import com.ourgame.ourgameserver.ws.model.user.UserJpaEntity;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class Player extends ObservableImpl {
     @JsonIgnore
     private int avgReactionTime;
     private boolean isReady;
-    private boolean busy;
+    private Lobby currentLobby;
 
     public Player(UserJpaEntity user) {
         this.username = user.getUsername();

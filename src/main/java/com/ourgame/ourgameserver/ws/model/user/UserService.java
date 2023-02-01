@@ -1,6 +1,6 @@
 package com.ourgame.ourgameserver.ws.model.user;
 
-import com.ourgame.ourgameserver.ws.controllers.dto.UserDto;
+import com.ourgame.ourgameserver.ws.dto.UserDto;
 import com.ourgame.ourgameserver.ws.model.exceptions.UserAlreadyExistsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
