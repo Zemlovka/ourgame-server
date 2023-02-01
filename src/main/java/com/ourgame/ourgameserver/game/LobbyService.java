@@ -50,7 +50,7 @@ public class LobbyService implements Observer {
                     PackParser.getPackage(lobbyDto.getPackageName()),
                     lobbyDto.getPassword(),
                     lobbyDto.getMaxPlayers());
-            if (lobbys.contains(lobby)) { //TODO
+            if (lobbys.contains(lobby)) {
                 throw new LobbyException("Lobby already exists");
             }
         } catch (JAXBException e) {
