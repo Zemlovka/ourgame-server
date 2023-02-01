@@ -1,8 +1,9 @@
 package com.ourgame.ourgameserver.ws.controllers;
 
 import com.ourgame.ourgameserver.ws.dto.UserDto;
-import com.ourgame.ourgameserver.ws.controllers.exceptions.CustomErrorMessage;
 import com.ourgame.ourgameserver.ws.model.exceptions.UserAlreadyExistsException;
+import com.ourgame.ourgameserver.ws.model.user.exceptions.CustomErrorMessage;
+
 import com.ourgame.ourgameserver.ws.model.user.UserService;
 import com.ourgame.ourgameserver.ws.security.TokenService;
 import com.ourgame.ourgameserver.ws.dto.StringPlusImage;

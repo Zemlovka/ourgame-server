@@ -2,7 +2,7 @@ package com.ourgame.ourgameserver.game;
 
 import com.ourgame.ourgameserver.game.exceptions.LobbyException;
 import com.ourgame.ourgameserver.game.exceptions.LobbyNotFoundException;
-import com.ourgame.ourgameserver.game.pack.Pack;
+import com.ourgame.ourgameserver.game.pack.Package;
 import com.ourgame.ourgameserver.game.pregame.Lobby;
 import com.ourgame.ourgameserver.utils.observer.Observer;
 import com.ourgame.ourgameserver.ws.dto.LobbyDto;
@@ -21,7 +21,7 @@ public class LobbyService implements Observer {
         lobbys = new ArrayList<>();
         this.playerService = playerService;
         //TODO: remove this
-        lobbys.add(new Lobby(0, "Lobby 1", playerService.getPlayer("user"), new Pack(), "234",6));
+        lobbys.add(new Lobby(0, "Lobby 1", playerService.getPlayer("user"), new Package(), "234",6));
         socketServer.createLobbyNamespace(lobbys.get(0));
     }
 
@@ -42,7 +42,7 @@ public class LobbyService implements Observer {
                 lobbys.size(),
                 lobbyDto.getName(),
                 playerService.getPlayer(hostUsername),
-                lobbyDto.getPack(),
+                lobbyDto.getAPackage(),
                 lobbyDto.getPassword(),
                 lobbyDto.getMaxPlayers());
 //        if (lobbys.contains(lobby)) { TODO

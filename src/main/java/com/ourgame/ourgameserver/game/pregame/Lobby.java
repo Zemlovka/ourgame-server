@@ -2,11 +2,10 @@ package com.ourgame.ourgameserver.game.pregame;
 
 import com.ourgame.ourgameserver.game.Player;
 import com.ourgame.ourgameserver.game.exceptions.LobbyException;
-import com.ourgame.ourgameserver.game.pack.Pack;
+import com.ourgame.ourgameserver.game.pack.Package;
 import com.ourgame.ourgameserver.utils.observer.ObservableImpl;
 import lombok.Getter;
 import lombok.Setter;
-import org.json.JSONObject;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -17,6 +16,7 @@ import java.util.*;
  * A lobby is created by a host with name, pack, password and privacy set
  * TODO add description to observer and conversion to game
  */
+
 @Getter
 @Setter
 public class Lobby extends ObservableImpl {
@@ -25,7 +25,7 @@ public class Lobby extends ObservableImpl {
     private final int id;
     private String name;
     private Player host;
-    private Pack pack;
+    private Package pack;
     private final Map<String, Player> players;
     private int maxPlayers;
     private final String password;
@@ -33,7 +33,7 @@ public class Lobby extends ObservableImpl {
     private LocalDateTime creationDate;
     private List<String> tags;
 
-    public Lobby(int id, String name, Player host, Pack pack, String password, int maxPlayers) {
+    public Lobby(int id, String name, Player host, Package pack, String password, int maxPlayers) {
         players = new HashMap<>();
         players.put(host.getUsername(), host);
         this.id = id;
