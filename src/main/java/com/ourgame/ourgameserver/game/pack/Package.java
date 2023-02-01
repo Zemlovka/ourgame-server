@@ -1,6 +1,7 @@
 package com.ourgame.ourgameserver.game.pack;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;

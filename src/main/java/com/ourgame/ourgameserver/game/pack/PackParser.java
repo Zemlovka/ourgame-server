@@ -1,7 +1,6 @@
 package com.ourgame.ourgameserver.game.pack;
 
 import javax.xml.bind.*;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.transform.stream.StreamSource;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
