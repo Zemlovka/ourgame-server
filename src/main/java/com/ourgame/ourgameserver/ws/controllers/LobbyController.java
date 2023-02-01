@@ -4,7 +4,7 @@ import com.ourgame.ourgameserver.game.LobbyService;
 import com.ourgame.ourgameserver.game.Player;
 import com.ourgame.ourgameserver.game.exceptions.LobbyNotFoundException;
 import com.ourgame.ourgameserver.game.pregame.Lobby;
-import com.ourgame.ourgameserver.ws.controllers.dto.LobbyDto;
+import com.ourgame.ourgameserver.ws.dto.LobbyDto;
 import com.ourgame.ourgameserver.ws.sockets.SocketServer;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

@@ -1,12 +1,11 @@
 package com.ourgame.ourgameserver.ws.controllers;
 
-import com.ourgame.ourgameserver.ws.controllers.dto.LobbyDto;
-import com.ourgame.ourgameserver.ws.controllers.dto.UserDto;
+import com.ourgame.ourgameserver.ws.dto.UserDto;
 import com.ourgame.ourgameserver.ws.controllers.exceptions.CustomErrorMessage;
 import com.ourgame.ourgameserver.ws.model.exceptions.UserAlreadyExistsException;
 import com.ourgame.ourgameserver.ws.model.user.UserService;
-import com.ourgame.ourgameserver.ws.security.service.TokenService;
-import com.ourgame.ourgameserver.ws.controllers.dto.StringPlusImage;
+import com.ourgame.ourgameserver.ws.security.TokenService;
+import com.ourgame.ourgameserver.ws.dto.StringPlusImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

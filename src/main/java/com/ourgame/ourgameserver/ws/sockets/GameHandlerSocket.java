@@ -1,20 +1,20 @@
 package com.ourgame.ourgameserver.ws.sockets;
 
-import com.corundumstudio.socketio.AckRequest;
-import com.corundumstudio.socketio.SocketIOClient;
-import com.corundumstudio.socketio.SocketIONamespace;
 import com.ourgame.ourgameserver.game.Player;
 import com.ourgame.ourgameserver.game.ingame.Game;
 import com.ourgame.ourgameserver.game.pregame.Lobby;
-import com.ourgame.ourgameserver.ws.sockets.dto.PlayerSocDto;
+import com.ourgame.ourgameserver.ws.dto.LobbyDto;
+import io.socket.socketio.server.SocketIoNamespace;
+import io.socket.socketio.server.SocketIoSocket;
+import org.json.JSONObject;
 
 
 public class GameHandlerSocket {
     private final SocketServer socketServer;
     private final Lobby lobby;
-    private final SocketIONamespace namespace;
+    private final SocketIoNamespace namespace;
 
-    public GameHandlerSocket(SocketServer socketServer, Lobby lobby, SocketIONamespace namespace) {
+    public GameHandlerSocket(SocketServer socketServer, Lobby lobby, SocketIoNamespace namespace) {
         this.socketServer = socketServer;
         this.lobby = lobby;
         this.namespace = namespace;
@@ -22,27 +22,38 @@ public class GameHandlerSocket {
     }
 
     public void socketSetup() {
-        namespace.getBroadcastOperations().sendEvent("lobby", lobby);
-        namespace.addConnectListener((SocketIOClient client) -> {
-            namespace.getBroadcastOperations().sendEvent("lobby", lobby);
-        });
+        namespace.on("connect", args -> {
+            SocketIoSocket socket = (SocketIoSocket) args[0];
+            namespace.broadcast(null, "lobby", new LobbyDto(lobby).toJson());
 
-        namespace.addEventListener("ready", PlayerSocDto.class, (SocketIOClient client, PlayerSocDto data, AckRequest ackRequest) -> {
-            lobby.setPlayerReadyStatus(new Player(data), true);
-            namespace.getBroadcastOperations().sendEvent("", lobby);
+            readyListener(socket);
+            startListener(socket);
         });
+    }
 
-        namespace.addEventListener("start", PlayerSocDto.class, (SocketIOClient client, PlayerSocDto data, AckRequest ackRequest) -> {
-            if (lobby.getHost().equals(new Player(data))
+    private void readyListener(SocketIoSocket socket) {
+        socket.on("ready", args -> {
+            JSONObject response = (JSONObject) args[0];
+            lobby.setPlayerReadyStatus(getPlayer(socket), response.getBoolean("ready"));
+            namespace.broadcast(null, "lobby", new LobbyDto(lobby).toJson());
+        });
+    }
+
+    private void startListener(SocketIoSocket socket) {
+        socket.on("start", args -> {
+            if (lobby.getHost().equals(getPlayer(socket))
                     && lobby.arePlayersReady()) {
                 new Game(lobby);
             }
-            // add game start logic
-            namespace.getBroadcastOperations().sendEvent("lobby", lobby);
+            namespace.broadcast(null, "game", new LobbyDto(lobby).toJson());
         });
     }
 
-    public void endGame() {
-        socketServer.deleteLobbyNamespace(lobby);
+    private Player getPlayer(SocketIoSocket socket) {
+        return new Player(socket.getInitialHeaders().get("username").get(0));
     }
+
+//    public void endGame() {
+//        socketServer.deleteLobbyNamespace(lobby);
+//    }
 }

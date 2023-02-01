@@ -4,6 +4,8 @@ import com.ourgame.ourgameserver.game.Player;
 import com.ourgame.ourgameserver.game.pregame.Lobby;
 import com.ourgame.ourgameserver.game.exceptions.LobbyException;
 import com.ourgame.ourgameserver.utils.observer.ObservableImpl;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
@@ -15,6 +17,8 @@ import java.util.Set;
  * TODO add description to observer
  * TODO add pack indexing and getting questions map
  */
+@Getter
+@Setter
 public class Game extends ObservableImpl {
     private final static int MAX_PLAYERS = 6;
     private Player host;
