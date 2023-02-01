@@ -2,6 +2,9 @@ package com.ourgame.ourgameserver.game;
 
 import com.ourgame.ourgameserver.game.exceptions.LobbyException;
 import com.ourgame.ourgameserver.game.pack.Package;
+import com.ourgame.ourgameserver.game.pack.Question;
+import com.ourgame.ourgameserver.game.pack.Round;
+import com.ourgame.ourgameserver.game.pack.Theme;
 import com.ourgame.ourgameserver.utils.observer.ObservableImpl;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +34,8 @@ public class Lobby extends ObservableImpl {
     private final boolean isPrivate;
     private final LocalDateTime creationDate;
     private final LobbyService lobbyService;
+    private Player activePlayer;
+    private Round currentRound;
 
     public Lobby(int id, String name, Player host, Package pack,
                  String password, boolean isPrivate, int playerLimit, LobbyService lobbyService) {
@@ -48,6 +53,27 @@ public class Lobby extends ObservableImpl {
             this.playerLimit = Math.max(playerLimit, MIN_PLAYERS_ALLOWED);
         this.creationDate = LocalDateTime.now();
         this.lobbyService = lobbyService;
+    }
+
+    public void startGame() {
+        //TODO
+        currentRound = pack.getRounds().get(0);
+        activePlayer = players.values().stream().findAny().get();
+    }
+
+    public void nextRound() {
+        //TODO
+        int index = pack.getRounds().indexOf(currentRound);
+        if (index == pack.getRounds().size() - 1) {
+            //TODO end game
+        } else {
+            currentRound = pack.getRounds().get(index + 1);
+        }
+    }
+
+    public Question getQuestion(String themeName, int questionNumber) {
+        int themeIndex = currentRound.getThemes().indexOf(new Theme(themeName));
+        return currentRound.getThemes().get(themeIndex).getQuestions().get(questionNumber);
     }
 
     public void changeHost(Player newHost) {

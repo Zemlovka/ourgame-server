@@ -2,6 +2,8 @@ package com.ourgame.ourgameserver.ws.sockets;
 
 
 import com.ourgame.ourgameserver.game.Lobby;
+import com.ourgame.ourgameserver.game.Player;
+import com.ourgame.ourgameserver.game.PlayerService;
 import io.socket.socketio.server.SocketIoServer;
 import org.springframework.stereotype.Component;
 
@@ -12,12 +14,14 @@ import java.util.Map;
 @Component
 public class SocketServer {
     private final SocketIoServer server;
+    private final PlayerService playerService;
     private final static String PATH = "/lobby";
     private final static int PORT = 9092;
 
     private final Map<Lobby, GameHandlerSocket> lobbySocketsMap;
 
-    public SocketServer() {
+    public SocketServer(PlayerService playerService) {
+        this.playerService = playerService;
         // null means "allow all" as stated in https://github.com/socketio/engine.io-server-java/blob/f8cd8fc96f5ee1a027d9b8d9748523e2f9a14d2a/engine.io-server/src/main/java/io/socket/engineio/server/EngineIoServerOptions.java#L26
         ServerWrapper serverWrapper = new ServerWrapper("0.0.0.0", PORT, null);
         try {
@@ -31,7 +35,7 @@ public class SocketServer {
 
     public String createLobbyNamespace(Lobby lobby) {
         String namespacePath = PATH + "/" + lobby.getId();
-        GameHandlerSocket lobbySocket = new GameHandlerSocket(this, lobby, server.namespace(namespacePath));
+        GameHandlerSocket lobbySocket = new GameHandlerSocket(this, lobby, server.namespace(namespacePath), playerService);
         lobbySocketsMap.put(lobby, lobbySocket);
         return namespacePath;
     }

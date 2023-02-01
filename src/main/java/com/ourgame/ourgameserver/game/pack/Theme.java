@@ -12,8 +12,30 @@ import java.util.List;
 public class Theme {
     @XmlElementWrapper(name = "questions")
     @XmlElement(name = "question")
-    List<Question> questions;
+    private List<Question> questions;
 
     @XmlAttribute
-    String name;
+    private String name;
+
+    public Theme() {
+    }
+
+    public Theme(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Theme theme = (Theme) o;
+
+        return getName().equals(theme.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return getName().hashCode();
+    }
 }

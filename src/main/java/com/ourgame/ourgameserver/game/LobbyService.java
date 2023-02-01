@@ -4,7 +4,6 @@ import com.ourgame.ourgameserver.game.exceptions.LobbyException;
 import com.ourgame.ourgameserver.game.exceptions.LobbyNotFoundException;
 import com.ourgame.ourgameserver.game.exceptions.PackageException;
 import com.ourgame.ourgameserver.game.pack.PackParser;
-import com.ourgame.ourgameserver.game.pack.Package;
 import com.ourgame.ourgameserver.utils.observer.Observer;
 import com.ourgame.ourgameserver.ws.dto.LobbyDto;
 import com.ourgame.ourgameserver.ws.sockets.SocketServer;
@@ -19,12 +18,12 @@ public class LobbyService implements Observer {
     private final List<Lobby> lobbys;
     private final PlayerService playerService;
 
-    public LobbyService(PlayerService playerService, /*TODO: remove this*/SocketServer socketServer) {
+    public LobbyService(PlayerService playerService, /*TODO: remove this*/SocketServer socketServer) throws JAXBException {
         lobbys = new ArrayList<>();
         this.playerService = playerService;
         //TODO: remove this
         lobbys.add(new Lobby(0, "Lobby 1", playerService.getPlayer("user"),
-                new Package(), "234",false,6, this));
+                PackParser.getPackage("testPack"), "234",false,6, this));
         socketServer.createLobbyNamespace(lobbys.get(0));
     }
 
