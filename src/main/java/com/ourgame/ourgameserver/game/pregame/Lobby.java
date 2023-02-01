@@ -20,8 +20,8 @@ import java.util.*;
 @Getter
 @Setter
 public class Lobby extends ObservableImpl {
-    private final static int MAX_PLAYERS = 6;
-    private final static int MIN_PLAYERS = 3;
+    private final static int MAX_PLAYERS_ALLOWED = 6;
+    private final static int MIN_PLAYERS_ALLOWED = 3;
     private final int id;
     private String name;
     private Player host;
@@ -42,13 +42,10 @@ public class Lobby extends ObservableImpl {
         this.pack = pack;
         this.tags = pack.getTags();
         this.password = password;
-        if (maxPlayers > MAX_PLAYERS) {
-            this.maxPlayers = MAX_PLAYERS;
-        } else if (maxPlayers < MIN_PLAYERS) {
-            this.maxPlayers = MIN_PLAYERS;
-        } else {
-            this.maxPlayers = maxPlayers;
-        }
+        if (maxPlayers > MAX_PLAYERS_ALLOWED)
+            this.maxPlayers = MAX_PLAYERS_ALLOWED;
+        else
+            this.maxPlayers = Math.max(maxPlayers, MIN_PLAYERS_ALLOWED);
         this.creationDate = LocalDateTime.now();
     }
 
