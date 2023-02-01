@@ -13,7 +13,7 @@ import java.util.Map;
 public class SocketServer {
     private final SocketIoServer server;
     private final static String PATH = "/lobby";
-    private final static int PORT = 9093;
+    private final static int PORT = 9092;
 
     private final ServerWrapper serverWrapper = new ServerWrapper("0.0.0.0", PORT, null); // null means "allow all" as stated in https://github.com/socketio/engine.io-server-java/blob/f8cd8fc96f5ee1a027d9b8d9748523e2f9a14d2a/engine.io-server/src/main/java/io/socket/engineio/server/EngineIoServerOptions.java#L26
 
