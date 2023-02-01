@@ -5,7 +5,6 @@ import com.ourgame.ourgameserver.game.exceptions.LobbyNotFoundException;
 import com.ourgame.ourgameserver.game.exceptions.PackageException;
 import com.ourgame.ourgameserver.game.pack.PackParser;
 import com.ourgame.ourgameserver.game.pack.Package;
-import com.ourgame.ourgameserver.game.pregame.Lobby;
 import com.ourgame.ourgameserver.utils.observer.Observer;
 import com.ourgame.ourgameserver.ws.dto.LobbyDto;
 import com.ourgame.ourgameserver.ws.sockets.SocketServer;
@@ -24,7 +23,8 @@ public class LobbyService implements Observer {
         lobbys = new ArrayList<>();
         this.playerService = playerService;
         //TODO: remove this
-        lobbys.add(new Lobby(0, "Lobby 1", playerService.getPlayer("user"), new Package(), "234",6));
+        lobbys.add(new Lobby(0, "Lobby 1", playerService.getPlayer("user"),
+                new Package(), "234",false,6, this));
         socketServer.createLobbyNamespace(lobbys.get(0));
     }
 
@@ -49,7 +49,9 @@ public class LobbyService implements Observer {
                     playerService.getPlayer(hostUsername),
                     PackParser.getPackage(lobbyDto.getPackageName()),
                     lobbyDto.getPassword(),
-                    lobbyDto.getMaxPlayers());
+                    lobbyDto.isPrivate(),
+                    lobbyDto.getMaxPlayers(),
+                    this);
             if (lobbys.contains(lobby)) {
                 throw new LobbyException("Lobby already exists");
             }

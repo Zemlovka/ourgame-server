@@ -1,7 +1,6 @@
 package com.ourgame.ourgameserver.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ourgame.ourgameserver.game.pregame.Lobby;
 import com.ourgame.ourgameserver.utils.observer.ObservableImpl;
 import com.ourgame.ourgameserver.ws.model.user.UserJpaEntity;
 import lombok.Getter;

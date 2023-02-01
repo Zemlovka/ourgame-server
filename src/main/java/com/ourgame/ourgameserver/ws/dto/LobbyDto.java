@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.ourgame.ourgameserver.game.Player;
-import com.ourgame.ourgameserver.game.pregame.Lobby;
+import com.ourgame.ourgameserver.game.Lobby;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -53,7 +53,7 @@ public class LobbyDto {
         this.players = lobby.getPlayers();
         this.isPrivate = lobby.isPrivate();
         this.playersCount = lobby.getPlayerCount();
-        this.maxPlayers = lobby.getMaxPlayers();
+        this.maxPlayers = lobby.getPlayerLimit();
     }
 
     public static List<LobbyDto> fromLobbys(List<Lobby> lobbys) {

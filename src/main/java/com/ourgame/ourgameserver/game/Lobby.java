@@ -1,6 +1,5 @@
-package com.ourgame.ourgameserver.game.pregame;
+package com.ourgame.ourgameserver.game;
 
-import com.ourgame.ourgameserver.game.Player;
 import com.ourgame.ourgameserver.game.exceptions.LobbyException;
 import com.ourgame.ourgameserver.game.pack.Package;
 import com.ourgame.ourgameserver.utils.observer.ObservableImpl;
@@ -22,31 +21,33 @@ import java.util.*;
 public class Lobby extends ObservableImpl {
     private final static int MAX_PLAYERS_ALLOWED = 6;
     private final static int MIN_PLAYERS_ALLOWED = 3;
+    private final int playerLimit;
     private final int id;
-    private String name;
+    private final String name;
     private Player host;
-    private Package pack;
     private final Map<String, Player> players;
-    private int maxPlayers;
+    private final Package pack;
     private final String password;
-    private boolean isPrivate;
-    private LocalDateTime creationDate;
-    private List<String> tags;
+    private final boolean isPrivate;
+    private final LocalDateTime creationDate;
+    private final LobbyService lobbyService;
 
-    public Lobby(int id, String name, Player host, Package pack, String password, int maxPlayers) {
+    public Lobby(int id, String name, Player host, Package pack,
+                 String password, boolean isPrivate, int playerLimit, LobbyService lobbyService) {
         players = new HashMap<>();
         players.put(host.getUsername(), host);
         this.id = id;
         this.name = name;
         this.host = host;
         this.pack = pack;
-        this.tags = pack.getTags();
         this.password = password;
-        if (maxPlayers > MAX_PLAYERS_ALLOWED)
-            this.maxPlayers = MAX_PLAYERS_ALLOWED;
+        this.isPrivate = isPrivate;
+        if (playerLimit > MAX_PLAYERS_ALLOWED)
+            this.playerLimit = MAX_PLAYERS_ALLOWED;
         else
-            this.maxPlayers = Math.max(maxPlayers, MIN_PLAYERS_ALLOWED);
+            this.playerLimit = Math.max(playerLimit, MIN_PLAYERS_ALLOWED);
         this.creationDate = LocalDateTime.now();
+        this.lobbyService = lobbyService;
     }
 
     public void changeHost(Player newHost) {
@@ -57,21 +58,26 @@ public class Lobby extends ObservableImpl {
 
     public void deleteHost() {
         if (players.size() == 0) {
-            // TODO delete lobby
+            lobbyService.deleteLobby(lobbyService.getLobbyId(this));
         }
         players.remove(host.getUsername());
         this.host = players.values().iterator().next();
     }
 
     public void addPlayer(Player player) {
-        if (players.size() >= maxPlayers) {
+        if (players.size() >= playerLimit) {
             throw new LobbyException("Max player limit is reached");
         }
         players.put(player.getUsername(), player);
     }
 
     public void removePlayer(Player user) {
-        players.remove(user);
+        if (user.equals(host)) {
+            deleteHost();
+        }
+        else {
+            players.remove(user.getUsername());
+        }
     }
 
     public void setPlayerReadyStatus(Player player, boolean isReady) {
@@ -94,6 +100,7 @@ public class Lobby extends ObservableImpl {
 //        return players.size() < maxPlayers && !players.containsValue(player);
         return true;
     }
+
     public boolean isPrivate() {
         return isPrivate;
     }
@@ -104,6 +111,10 @@ public class Lobby extends ObservableImpl {
 
     public Set<Player> getPlayers() {
         return new HashSet<>(players.values());
+    }
+
+    public List<String> getTags() {
+        return pack.getTags();
     }
 
 }

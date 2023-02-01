@@ -1,7 +1,7 @@
 package com.ourgame.ourgameserver.ws.sockets;
 
 
-import com.ourgame.ourgameserver.game.pregame.Lobby;
+import com.ourgame.ourgameserver.game.Lobby;
 import io.socket.socketio.server.SocketIoServer;
 import org.springframework.stereotype.Component;
 

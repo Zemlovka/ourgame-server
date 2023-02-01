@@ -1,8 +1,7 @@
 package com.ourgame.ourgameserver.ws.sockets;
 
 import com.ourgame.ourgameserver.game.Player;
-import com.ourgame.ourgameserver.game.ingame.Game;
-import com.ourgame.ourgameserver.game.pregame.Lobby;
+import com.ourgame.ourgameserver.game.Lobby;
 import com.ourgame.ourgameserver.ws.dto.LobbyDto;
 import io.socket.socketio.server.SocketIoNamespace;
 import io.socket.socketio.server.SocketIoSocket;
@@ -27,7 +26,12 @@ public class GameHandlerSocket {
             namespace.broadcast(null, "lobby", new LobbyDto(lobby).toJson());
 
             readyListener(socket);
-            startListener(socket);
+
+            socket.on("start", args1 -> {
+                if (lobby.getHost().equals(getPlayer(socket)) && lobby.arePlayersReady()) {
+                    namespace.broadcast(null, "game", new LobbyDto(lobby).toJson());
+                }
+            });
         });
     }
 
@@ -39,14 +43,8 @@ public class GameHandlerSocket {
         });
     }
 
-    private void startListener(SocketIoSocket socket) {
-        socket.on("start", args -> {
-            if (lobby.getHost().equals(getPlayer(socket))
-                    && lobby.arePlayersReady()) {
-                new Game(lobby);
-            }
-            namespace.broadcast(null, "game", new LobbyDto(lobby).toJson());
-        });
+    private void startGame(SocketIoSocket socket) {
+
     }
 
     private Player getPlayer(SocketIoSocket socket) {

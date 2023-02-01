@@ -1,4 +1,4 @@
-package com.ourgame.ourgameserver.game.ingame;
+package com.ourgame.ourgameserver.game;
 
 import com.ourgame.ourgameserver.game.Player;
 
