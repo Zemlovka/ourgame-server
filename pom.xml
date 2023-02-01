@@ -8,6 +8,13 @@
 		<version>3.0.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+<!--	<distributionManagement>-->
+<!--		<repository>-->
+<!--			<id>releases</id>-->
+<!--			<name>releases</name>-->
+<!--			<url>http://localhost:8081/repository/maven-releases/</url>-->
+<!--		</repository>-->
+<!--	</distributionManagement>-->
 	<groupId>com.ourgame</groupId>
 	<artifactId>our-game-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -216,6 +223,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${project.parent.version}</version>
 				<configuration>
 					<excludes>
 						<exclude>
