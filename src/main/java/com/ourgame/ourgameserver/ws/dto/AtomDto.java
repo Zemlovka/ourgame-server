@@ -9,9 +9,11 @@ import org.json.JSONObject;
 public class AtomDto {
     private final String text;
     private final String type;
-    public AtomDto(Atom atom) {
+    private final long delay;
+    public AtomDto(Atom atom, long delay) {
         this.text = atom.getText();
         this.type = atom.getType();
+        this.delay = delay;
     }
 
     public JSONObject toJson() {
