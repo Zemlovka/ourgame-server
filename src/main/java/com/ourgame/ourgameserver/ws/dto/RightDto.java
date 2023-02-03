@@ -1,5 +1,8 @@
 package com.ourgame.ourgameserver.ws.dto;
 
+import org.json.JSONObject;
+
+
 public class RightDto {
     private final String right;
     private final int price;
@@ -15,5 +18,9 @@ public class RightDto {
 
     public int getPrice() {
         return price;
+    }
+
+    public JSONObject toJson() {
+        return new JSONObject(this);
     }
 }

@@ -9,6 +9,7 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
@@ -41,6 +42,7 @@ public final class ServerWrapper {
         mServer = new Server(new InetSocketAddress(ip, mPort));
         eioOptions = EngineIoServerOptions.newFromDefault();
         eioOptions.setAllowedCorsOrigins(allowedCorsOrigins);
+        eioOptions.setCorsHandlingDisabled(true);
 
         mEngineIoServer = new EngineIoServer(eioOptions);
         mSocketIoServer = new SocketIoServer(mEngineIoServer);
@@ -52,18 +54,18 @@ public final class ServerWrapper {
         servletContextHandler.setContextPath("/");
         servletContextHandler.addFilter(RemoteAddrFilter.class, "/socket.io/*", EnumSet.of(DispatcherType.REQUEST));
 
-        /*
-        An alternative way of handling the CORS.
-        Must set eioOptions.setCorsHandlingDisabled(true) if you want to use the below method
+
+//        An alternative way of handling the CORS.
+//        Must set eioOptions.setCorsHandlingDisabled(true) if you want to use the below method
 
         FilterHolder cors = new FilterHolder(new CrossOriginFilter());
         cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
         cors.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
         cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "OPTIONS,GET,POST,HEAD");
-        cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin,Cache-Control");
+        cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin,Cache-Control,username");
         cors.setInitParameter(CrossOriginFilter.CHAIN_PREFLIGHT_PARAM, "false");
         servletContextHandler.addFilter(cors, "/socket.io/*", EnumSet.of(DispatcherType.REQUEST));
-        */
+
 
         servletContextHandler.addServlet(new ServletHolder(new HttpServlet() {
             @Override

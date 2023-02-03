@@ -4,15 +4,16 @@ import com.ourgame.ourgameserver.game.Player;
 import com.ourgame.ourgameserver.game.Lobby;
 import com.ourgame.ourgameserver.game.PlayerService;
 import com.ourgame.ourgameserver.game.pack.Atom;
+import com.ourgame.ourgameserver.game.pack.Question;
 import com.ourgame.ourgameserver.ws.dto.AtomDto;
 import com.ourgame.ourgameserver.ws.dto.GameMapDto;
 import com.ourgame.ourgameserver.ws.dto.LobbyDto;
+import com.ourgame.ourgameserver.ws.dto.RightDto;
 import io.socket.socketio.server.SocketIoNamespace;
 import io.socket.socketio.server.SocketIoSocket;
 import org.json.JSONObject;
 
 import javax.xml.bind.JAXBException;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,11 +38,14 @@ public class GameHandlerSocket {
         namespace.on("connect", args -> {
             SocketIoSocket socket = (SocketIoSocket) args[0];
             lobby.addPlayer(getPlayer(socket));
+            if (lobby.getHost().equals(getPlayer(socket))) {
+                socket.joinRoom();
+            }
             namespace.broadcast(null, "lobby", new LobbyDto(lobby).toJson());
 
             disconnectListener(socket);
             readyListener(socket);
-            startGame(socket);
+//            startGame(socket);
         });
     }
 
@@ -57,24 +61,37 @@ public class GameHandlerSocket {
             JSONObject response = (JSONObject) args[0];
             lobby.setPlayerReadyStatus(getPlayer(socket), response.getBoolean("ready"));
             namespace.broadcast(null, "lobby", new LobbyDto(lobby).toJson());
-        });
-    }
+            if (lobby.arePlayersReady()) {
+                try {
+                    GameMapDto map = new GameMapDto(lobby.getPack());
+                    if (lobby.getHost().equals(getPlayer(socket)) && lobby.arePlayersReady()) {
+                        namespace.broadcast(null, "map", map.toJson());
+                        lobby.startGame();
 
-    private void startGame(SocketIoSocket socket) {
-        socket.on("start", args -> {
-            try {
-                GameMapDto map = new GameMapDto(lobby.getPack());
-                if (lobby.getHost().equals(getPlayer(socket)) && lobby.arePlayersReady()) {
-                    namespace.broadcast(null, "map", map.toJson());
-                    lobby.startGame();
-
-                    selectQuestionListener(socket);
+                        selectQuestionListener(socket);
+                    }
+                } catch (JAXBException e) {
+                    e.printStackTrace();
                 }
-            } catch (JAXBException e) {
-                e.printStackTrace();
             }
         });
     }
+
+//    private void startGame(SocketIoSocket socket) {
+//        socket.on("start", args -> {
+//            try {
+//                GameMapDto map = new GameMapDto(lobby.getPack());
+//                if (lobby.getHost().equals(getPlayer(socket)) && lobby.arePlayersReady()) {
+//                    namespace.broadcast(null, "map", map.toJson());
+//                    lobby.startGame();
+//
+//                    selectQuestionListener(socket);
+//                }
+//            } catch (JAXBException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//    }
 
     private void selectQuestionListener(SocketIoSocket socket) {
         socket.on("select", args -> {
@@ -83,18 +100,45 @@ public class GameHandlerSocket {
                 JSONObject request = (JSONObject) args[0];
                 String theme = request.getString("theme");
                 int questionIndex = request.getInt("question");
-                Atom questionAtom = lobby.getQuestion(theme, questionIndex).getAtoms().get(0);
-                namespace.broadcast(null, "question", new AtomDto(questionAtom, answerDelay).toJson());
+                Question question = lobby.getQuestion(theme, questionIndex);
+                Atom questionAtom = question.getAtoms().get(0);
+                AtomDto atomDto = new AtomDto(questionAtom, answerDelay);
+                RightDto rightDto = new RightDto(question.getAnswers().get(0), question.getPrice());
+
+                namespace.broadcast(null, "question", atomDto);
                 TimerTask timerTask = new TimerTask() {
                     @Override
                     public void run() {
-                        namespace.broadcast(null, "answer", new LobbyDto(lobby).toJson());
+                        namespace.broadcast(null, "answer", rightDto.toJson());
                     }
                 };
+
+                socket.on("answerTry", args1 -> {
+                    timer.cancel();
+                    namespace.broadcast("host", "answer", rightDto.toJson());
+                    timer.schedule(timerTask, answerDelay);
+                });
+
                 timer.schedule(timerTask, answerDelay);
             }
         });
     }
+
+//    public void hostDecisionListener(SocketIoSocket socket) {
+//        socket.on("hostDecision", args -> {
+//            if (lobby.getHost().equals(getPlayer(socket))) {
+//                JSONObject request = (JSONObject) args[0];
+//                String desicion = request.getString("desicion");
+//                if (desicion.equals("next")) {
+//                    lobby.nextPlayer();
+//                    namespace.broadcast(null, "nextPlayer", new JSONObject().put("player", lobby.getActivePlayer().getName()));
+//                } else if (desicion.equals("end")) {
+//                    lobby.endGame();
+//                    namespace.broadcast(null, "endGame", new JSONObject());
+//                }
+//            }
+//        });
+//    }
 
 //    private void answerListener(SocketIoSocket socket) {
 //        socket.on("answer", args -> {
